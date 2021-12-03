@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from pyoneer.core.types.defaultdict import OrderedDictCollection
+from dewloosh.core.types.defaultdict import OrderedDictCollection
 
 
 class Hierarchy(OrderedDictCollection):

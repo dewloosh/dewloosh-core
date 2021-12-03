@@ -6,7 +6,6 @@ Multiple solutions on how to enforce an abstract class property
 on an object. Generic types like 'List[int]' are not allowed, 
 because the don't work well with the isinstance()-like methods.
 
-@author: Beni
 """
 from abc import ABC
 

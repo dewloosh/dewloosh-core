@@ -1,16 +1,11 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Fri Aug  6 12:47:03 2021
-
-@author: dzsudzsu
-"""
 
 __all__ = ['Wrapper', 'wrapper', 'customwrapper', 'wrap']
 
 NoneType = type(None)
 
 
-class Wrapper(object):
+class Wrapper:
     """
     Wrapper base class that
         (a) wraps an existing object at object creation provided as a keyword

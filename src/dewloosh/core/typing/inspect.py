@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from inspect import signature, Parameter
 from typing import Any, Hashable
 from typing import Generic as _GenericAlias
