@@ -1,0 +1,10 @@
+LICENSE
+README.md
+pyproject.toml
+setup.py
+src/dewloosh.core.egg-info/PKG-INFO
+src/dewloosh.core.egg-info/SOURCES.txt
+src/dewloosh.core.egg-info/dependency_links.txt
+src/dewloosh.core.egg-info/namespace_packages.txt
+src/dewloosh.core.egg-info/requires.txt
+src/dewloosh.core.egg-info/top_level.txt
