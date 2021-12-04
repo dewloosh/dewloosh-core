@@ -31,7 +31,7 @@ setup(
     description="A simple namespace distro",
     long_description=long_description,   
     long_description_content_type="text/markdown",
-	packages=find_packages('src.dewloosh.core'),
+	#packages=find_packages('src.dewloosh.core'),
     namespace_packages=find_namespace_packages(include=['dewloosh.*']),   
     classifiers=[
         'Development Status :: 3 - Alpha',     
