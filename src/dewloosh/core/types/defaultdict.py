@@ -2,10 +2,11 @@
 from typing import Callable, Union
 from collections import OrderedDict
 from copy import deepcopy, copy
+from dewloosh.core.tools.typing import issequence
 
 
 __all__ = ["DefaultDict", "OrderedDefaultDict", "NestedDict",
-           "NestedOrderedDict"]
+           "NestedOrderedDict", "dictparser"]
 
 
 class DefaultDict(dict):
@@ -174,7 +175,7 @@ class DictCollection(DefaultDict):
 
     def __getitem__(self, key):
         try:
-            if isinstance(key, tuple):
+            if issequence(key):
                 return parseaddress(self, key)
             else:
                 return super().__getitem__(key)
@@ -185,7 +186,7 @@ class DictCollection(DefaultDict):
 
     def __setitem__(self, key, value):
         try:
-            if isinstance(key, tuple):
+            if issequence(key):
                 if not key[0] in self:
                     d = self.__missing__(key[0])
                 else:
@@ -203,7 +204,7 @@ class DictCollection(DefaultDict):
             return self.__missing__(key)
 
     def __missing__(self, key):
-        if isinstance(key, tuple):
+        if issequence(key):
             if key[0] not in self:
                 self[key[0]] = value = self.default_factory()
             else:
@@ -227,7 +228,7 @@ class OrderedDictCollection(OrderedDefaultDict):
 
     def __getitem__(self, key):
         try:
-            if isinstance(key, tuple):
+            if issequence(key):
                 return parseaddress(self, key)
             else:
                 return super().__getitem__(key)
@@ -238,7 +239,7 @@ class OrderedDictCollection(OrderedDefaultDict):
 
     def __setitem__(self, key, value):
         try:
-            if isinstance(key, tuple):
+            if issequence(key):
                 if not key[0] in self:
                     d = self.__missing__(key[0])
                 else:
@@ -256,7 +257,7 @@ class OrderedDictCollection(OrderedDefaultDict):
             return self.__missing__(key)
 
     def __missing__(self, key):
-        if isinstance(key, tuple):
+        if issequence(key):
             if key[0] not in self:
                 self[key[0]] = value = self.default_factory()
             else:
@@ -299,39 +300,71 @@ def parseaddress(d: dict, a: list):
         return d[a[0]]
 
 
-def parseitems(d: dict = None, *args, **kwargs):
+def parseitems(d: dict = None, *args, dtype:dict, **kwargs):
     """
     A generator function that yields all the items of a nested dictionary as
     (key, value) pairs.
 
     Notes
     -----
-        (1) Does not return internal dictionaries.
+        Does not return nested dictionaries themselves, only their content.
     """
     for key, value in d.items():
-        if isinstance(value, dict):
-            for data in parseitems(value):
+        if isinstance(value, dtype):
+            for data in parseitems(value, dtype=dtype):
                 yield data
         else:
             yield key, value
 
 
-def dictparser(d: dict = None, address=[], *args, **kwargs):
+def dictparser(d: dict = None, address=[], *args, dtype=dict, **kwargs):
     """
     Iterates through all the values of a nested dictionary.
 
     Notes
     -----
-        (1) Returns all kinds of items.
+        Returns all kinds of items, even nested discionaries themselves,
+        along with their content.
     """
     for key, value in d.items():
         subaddress = copy(address)
         subaddress.append(key)
-        if isinstance(value, dict):
-            for data in dictparser(value, subaddress):
+        if isinstance(value, dtype):
+            for data in dictparser(value, subaddress, dtype=dtype):
                 yield data
         else:
             yield subaddress, value
+            
+
+def parsedicts_addr(d: dict = None, address=[], *args, inclusive=True, 
+                    dtype=dict, deep=True, **kwargs):
+    if inclusive:
+        if isinstance(d, dtype):
+            yield address, d
+    for key, value in d.items():
+        if isinstance(value, dtype):
+            addr = copy(address)
+            addr.append(key)
+            yield addr, value
+            if deep:
+                for subaddr, subval in \
+                    parsedicts_addr(value, addr, 
+                                    inclusive=False, dtype=dtype):
+                        yield subaddr, subval
+
+
+def parsedicts(d: dict = None, *args, inclusive=True, dtype=dict,
+               deep=True, **kwargs):
+    if inclusive:
+        if isinstance(d, dtype):
+            yield d
+    for value in d.values():
+        if isinstance(value, dtype):
+            yield value
+            if deep:
+                for subvalue in \
+                    parsedicts(value, inclusive=False, dtype=dtype):
+                        yield subvalue
 
 
 if __name__ == '__main__':
