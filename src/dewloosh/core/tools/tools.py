@@ -9,7 +9,7 @@ def floatformatter(*args, sig=6, **kwargs):
     return "{" + "0:.{}g".format(sig) + "}"
 
 
-def float_to_str_sig(value, *args, sig: int = 6, atol: float = 1e-7, **kwargs):
+def float_to_str_sig(value, *args, sig: int=6, atol: float=1e-7, **kwargs):
     """
     Returns a string representation of a floating point number, with
     given significant digits.
@@ -23,8 +23,8 @@ def float_to_str_sig(value, *args, sig: int = 6, atol: float = 1e-7, **kwargs):
         Number of significant digits.
 
     atol : float
-        Floating point tolerance. Values smaller than this are 
-        considered to be zero.
+        Floating point tolerance. Values smaller than this 
+        in the absolute sense are treated as zero.
 
     Returns
     -------
@@ -35,7 +35,7 @@ def float_to_str_sig(value, *args, sig: int = 6, atol: float = 1e-7, **kwargs):
         if atol is not None:
             if abs(value) < atol:
                 value = 0.0
-        return '{:.{p}g}'.format(value, p=sig)
+        return floatformatter(sig=sig).format(value)
     else:
         value = np.array(value)
         if atol is not None:
