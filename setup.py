@@ -25,14 +25,16 @@ with open('requirements.txt') as f:
 
 setup(
 	name="dewloosh.core",
-    version=get_version("src/Dewloosh/core/__init__.py"),                        
+    version=get_version("src/dewloosh/core/__init__.py"),                        
     author="dewloosh",
     author_email = 'dewloosh@gmail.com',                   
     description="A simple namespace distro",
     long_description=long_description,   
     long_description_content_type="text/markdown",
-    namespace_packages=find_namespace_packages(include=['dewloosh.*']),   
-    classifiers=[
+	url = 'https://github.com/dewloosh/dewloosh-core',   
+    download_url = 'https://github.com/dewloosh/dewloosh-core/archive/refs/tags/0_0_2.zip',
+	packages=find_namespace_packages(where='src', include=['dewloosh.*']),
+	classifiers=[
         'Development Status :: 3 - Alpha',     
         'License :: OSI Approved :: MIT License',   
         'Programming Language :: Python :: 3',
@@ -41,5 +43,6 @@ setup(
     python_requires='>=3.6',                             
     package_dir={'':'src'},     
     install_requires=required,
+	zip_safe=False,
 )
 
