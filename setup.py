@@ -32,7 +32,7 @@ setup(
     long_description=long_description,   
     long_description_content_type="text/markdown",
 	url = 'https://github.com/dewloosh/dewloosh-core',   
-    download_url = 'https://github.com/dewloosh/dewloosh-core/archive/refs/tags/0_0_2.zip',
+    download_url = 'https://github.com/dewloosh/dewloosh-core/archive/refs/tags/0_0_dev4.zip',
 	packages=find_namespace_packages(where='src', include=['dewloosh.*']),
 	classifiers=[
         'Development Status :: 3 - Alpha',     
