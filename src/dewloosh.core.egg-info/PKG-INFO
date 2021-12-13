@@ -7,9 +7,6 @@ Author: dewloosh
 Author-email: dewloosh@gmail.com
 License: UNKNOWN
 Download-URL: https://github.com/dewloosh/dewloosh-core/archive/refs/tags/0_0_dev4.zip
-Description: # polydata
-        A package to build and manage polygonal data
-        
 Platform: UNKNOWN
 Classifier: Development Status :: 3 - Alpha
 Classifier: License :: OSI Approved :: MIT License
@@ -17,3 +14,9 @@ Classifier: Programming Language :: Python :: 3
 Classifier: Operating System :: OS Independent
 Requires-Python: >=3.6
 Description-Content-Type: text/markdown
+License-File: LICENSE
+
+# polydata
+A package to build and manage polygonal data
+
+
