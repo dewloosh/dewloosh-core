@@ -1,4 +1,0 @@
-setuptools
-wheel
-six
-numpy
