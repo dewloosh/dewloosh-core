@@ -19,7 +19,7 @@ class Wrapper:
 
     def __init__(self, *args, **kwargs):
         super().__init__()
-        self._wrapped = kwargs.get(self.wrapkey, None)
+        self.wrap(kwargs.get(self.wrapkey, None))
 
         if self._wrapped is None and self.wraptype is not NoneType:
             for arg in args:
@@ -42,7 +42,7 @@ class Wrapper:
                     "Wrong type, unable to wrap object : {}". \
                     format(self._wrapped)
 
-    def wrap(self, obj):
+    def wrap(self, obj=None):
         if self.wraptype is not NoneType:
             if isinstance(obj, self.wraptype):
                 self._wrapped = obj
@@ -56,7 +56,8 @@ class Wrapper:
         return self._wrapped
 
     def __hasattr__(self,attr):
-        return any([attr in self.__dict__, attr in self._wrapped.__dict__])
+        return any([attr in self.__dict__, 
+                    attr in self._wrapped.__dict__])
 
     def __getattr__(self, attr):
         if attr in self.__dict__:
@@ -80,7 +81,7 @@ class Wrapper:
 
     def __setitem__(self, index, value):
         try:
-            return super().__setitem__(index,value)
+            return super().__setitem__(index, value)
         except Exception:
             try:
                 return self._wrapped.__setitem__(index,value)
