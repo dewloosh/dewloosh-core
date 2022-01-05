@@ -55,7 +55,7 @@ class Wrapper:
     def wrapped_obj(self):
         return self._wrapped
 
-    def __hasattr__(self,attr):
+    def __hasattr__(self, attr):
         return any([attr in self.__dict__, 
                     attr in self._wrapped.__dict__])
 

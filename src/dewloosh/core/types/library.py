@@ -4,7 +4,7 @@ from dewloosh.core.types.defaultdict import OrderedDictCollection, \
 from dewloosh.core.tools.typing import issequence
 
 
-class Hierarchy(OrderedDictCollection):
+class Library(OrderedDictCollection):
 
     def __init__(self, *args, parent=None, root=None, **kwargs):
         super().__init__(*args, **kwargs)
@@ -40,7 +40,7 @@ class Hierarchy(OrderedDictCollection):
         return self.parent is None
 
     def containers(self, *args, inclusive=False, deep=True, dtype=None, **kwargs):
-        dtype = Hierarchy if dtype is None else dtype
+        dtype = Library if dtype is None else dtype
         return parsedicts(self, inclusive=inclusive, dtype=dtype, deep=deep)
 
     def __missing__(self, key):
@@ -49,7 +49,7 @@ class Hierarchy(OrderedDictCollection):
         else:
             return super().__missing__(key)
 
-    def __join_parent__(self, parent: 'Hierarchy'):
+    def __join_parent__(self, parent: 'Library'):
         self.parent = parent
         self._root = parent.root()
 
@@ -68,7 +68,7 @@ class Hierarchy(OrderedDictCollection):
                 else:
                     self[key[0]] = value
             else:
-                if isinstance(value, Hierarchy):
+                if isinstance(value, Library):
                     value.__join_parent__(self)
                 return super().__setitem__(key, value)
         except AttributeError:
@@ -84,7 +84,7 @@ class Hierarchy(OrderedDictCollection):
 
 if __name__ == '__main__':
 
-    h = Hierarchy()
+    h = Library()
     h['a', 'b', 'c', 'e'] = 1
     #h['a']['b']['c']['e'] = 1
     h['a']['b']['d'] = 2

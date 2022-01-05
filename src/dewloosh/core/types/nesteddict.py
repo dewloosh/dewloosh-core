@@ -35,7 +35,7 @@ class NestedOrderedDict(OrderedDict):
             (1) If the keyword 'inclusive' is provided as True, returns root
                 as the first item.
             (2) If 'relative' is in args, addresses are measured relative to
-                the calling Hierarchy.
+                the calling Library.
         Notes
         -----
             (1) Returns all kinds of items.
