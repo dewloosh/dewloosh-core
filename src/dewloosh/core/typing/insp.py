@@ -157,7 +157,7 @@ class Signature(dict):
         assert self.compatible_op(other)
         for key,value in other.items():
             if key not in ['rtype', 'dtype']:
-                if isinstance(value,frozenset):
+                if isinstance(value, frozenset):
                     if key in self and isinstance(self[key], frozenset):
                         s = set(self[key])
                         s.update(set(value))
@@ -183,16 +183,15 @@ class Signature(dict):
         if isinstance(self['rtype'], _GenericAlias):
             if not isinstance(type(value), _GenericAlias):
                 typeargs = self['rtype'].__dict__['__args__']
-                if not type(value) in typeargs :
+                if not type(value) in typeargs:
                     return False
             else:
-                if self['rtype'] != type(value)  :
+                if self['rtype'] != type(value):
                     return False
         elif self['rtype'] != Any:
-            if self['rtype'] != type(value)  :
+            if self['rtype'] != type(value):
                 return False
-
         return True
 
     def accepts_params(self, *args):
-        pass
+        raise NotImplementedError
