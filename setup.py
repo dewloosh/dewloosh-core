@@ -1,13 +1,14 @@
+# -*- coding: utf-8 -*-
 import codecs
 import os.path
-import setuptools
-from setuptools import find_namespace_packages, find_packages, setup
+from setuptools import find_namespace_packages, setup
 
 
 def read(rel_path):
     here = os.path.abspath(os.path.dirname(__file__))
     with codecs.open(os.path.join(here, rel_path), 'r') as fp:
         return fp.read()
+
 
 def get_version(rel_path):
     for line in read(rel_path).splitlines():
@@ -16,23 +17,43 @@ def get_version(rel_path):
             return line.split(delim)[1]
     else:
         raise RuntimeError("Unable to find version string.")
+    
+    
+def get_description(rel_path):
+    for line in read(rel_path).splitlines():
+        if line.startswith('__description__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError("Unable to find description string.")
+
 
 with open("README.md", "r") as fh:
     long_description = fh.read()
 
+
 with open('requirements.txt') as f:
     required = f.read().splitlines()
 
+
+_module = os.listdir(os.path.join(os.path.dirname(__file__), "src\\dewloosh"))[0]
+_init_path = "src/dewloosh/{}/__init__.py".format(_module)
+_version = get_version(_init_path)
+_description = get_description(_init_path)
+_url = 'https://github.com/dewloosh/dewloosh-{}'.format(_module)
+_download_url = _url + '/archive/refs/tags/{}.zip'.format(_version)
+
+
 setup(
-	name="dewloosh.core",
-    version=get_version("src/dewloosh/core/__init__.py"),                        
+	name="dewloosh.{}".format(_module),
+    version=_version,                        
     author="dewloosh",
     author_email = 'dewloosh@gmail.com',                   
-    description="A simple namespace distro",
+    description=_description,
     long_description=long_description,   
     long_description_content_type="text/markdown",
-	url = 'https://github.com/dewloosh/dewloosh-core',   
-    download_url = 'https://github.com/dewloosh/dewloosh-core/archive/refs/tags/0_0_dev5.zip',
+	url = _url, 
+    download_url = _download_url,
 	packages=find_namespace_packages(where='src', include=['dewloosh.*']),
 	classifiers=[
         'Development Status :: 3 - Alpha',     
