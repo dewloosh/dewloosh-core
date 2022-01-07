@@ -1,15 +1,6 @@
 # dewloosh.core
 
-This package contains common developer utilities to support other `dewloosh` packages, such as
+This package contains common developer utilities to support other `dewloosh` packages.
 
-* Classes `DictCollection` and `OrderedDictCollection` providing facilities to deal with nested dictionaries, allowing us to create and manipulate hierarchical data objects. 
+**The package in alpa stage, under development**. Expected date of the first stable release is 2022-Q2.
 
-* A `Library` class, that takes `OrderedDictCollection` to the next level.
-
-* A set of abstract base classes for metaprogramming.
-
-* A base class for array types.
-
-* Various decorators, wrappers and other handy developer tools.
-
-* Some other tools for educational refrencing.
