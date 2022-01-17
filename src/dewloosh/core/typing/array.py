@@ -79,6 +79,9 @@ class Array(NDArrayOperatorsMixin, Wrapper):
     
     def __setitem__(self, key):
         return self._array.__setitem__(key)
+    
+    def __len__(self):
+        return self._array.shape[0]
 
     def to_numpy(self):
         return self.__array__()
