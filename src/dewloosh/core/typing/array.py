@@ -32,7 +32,7 @@ class ArrayBase(ABC_Safe, np.ndarray):
         # From an explicit constructor - e.g. InfoArray():
         #    obj is None
         #    (we're in the middle of the InfoArray.__new__
-        #    constructor, and self.info will be set when we return to
+        #    constructor, and self.info will be set when we return 0to
         #    InfoArray.__new__)
         if obj is None: return
         # From view casting - e.g arr.view(InfoArray):
