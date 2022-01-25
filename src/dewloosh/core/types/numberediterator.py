@@ -63,12 +63,12 @@ if __name__ == '__main__':
     l.append(item4)
     l.append(item5)
 
-    print('first print')
+    print('\nfirst print')
     l.SortedLoop = True
     for item in l:
         print(item.Num)
 
-    print('second print')
+    print('\nsecond print')
     l.SortedLoop = False
     for item in l:
         print(item.Num)

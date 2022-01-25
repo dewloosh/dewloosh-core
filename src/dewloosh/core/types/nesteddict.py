@@ -5,7 +5,9 @@ from copy import copy
 
 class NestedOrderedDict(OrderedDict):
     """
-    A nested dictionary hierarchy.
+    A nested dictionary hierarchy. In contrast with the
+    `Library` class, this does not implement a default
+    behaviour for missing keys.
     """
 
     separator = '::'

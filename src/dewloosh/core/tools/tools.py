@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 import sys
-from dewloosh.core.tools.typing import issequence
 import numpy as np
+from collections import Iterable
+import six
 
 
 def floatformatter(*args, sig=6, **kwargs):
@@ -117,6 +118,16 @@ def arabicrange(N: int = 1, **kwargs):
     return [str(c) for c in range(start, stop)]
 
 
+def issequence(arg):
+    """
+    A sequence is an iterable, but not any kind of string.
+    """
+    return (
+        isinstance(arg, Iterable)
+        and not isinstance(arg, six.string_types)
+    )
+
+
 if __name__ == '__main__':
 
     lrange = latinrange(5, start='i')
@@ -128,6 +139,14 @@ if __name__ == '__main__':
     for i in range(6):
         print(next(abc))
 
-    abc = alphabet('u')
+    abc = alphabet(start='u')
     for i in range(6):
         print(next(abc))
+        
+    abc = alphabet('u', start='\x03')
+    for i in range(4):
+        print(next(abc))
+    
+    abc = alphabet('u', start='\x03')
+    pokerstr = [next(abc) for _ in range(4)]
+    print("{} {} {} {}".format(*pokerstr))

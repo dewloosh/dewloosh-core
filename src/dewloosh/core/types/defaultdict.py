@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
-from typing import Callable, Union
+from typing import Union, Callable
 from collections import OrderedDict
 from copy import deepcopy, copy
-from dewloosh.core.tools.typing import issequence
+from dewloosh.core.tools import issequence
 
 
 __all__ = ["DefaultDict", "OrderedDefaultDict", "NestedDict",
@@ -300,7 +300,7 @@ def parseaddress(d: dict, a: list):
         return d[a[0]]
 
 
-def parseitems(d: dict = None, *args, dtype:dict, **kwargs):
+def parseitems(d: dict = None, *args, dtype=dict, **kwargs):
     """
     A generator function that yields all the items of a nested dictionary as
     (key, value) pairs.

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import numpy as np
 from numpy.lib.mixins import NDArrayOperatorsMixin
-from dewloosh.core.typing.wrap import Wrapper
+from dewloosh.core.abc.wrap import Wrapper
 from dewloosh.core.abc import ABC_Safe
 
 
