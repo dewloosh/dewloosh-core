@@ -1,6 +1,5 @@
 # -*- coding: utf-8 -*-
 from collections import Iterable
-import numpy as np
 from typing import Callable
 
 
@@ -60,8 +59,7 @@ def getallfromkwargs(keys, default=None, **kwargs):
 
 def getasany(keys, default=None, **kwargs):
     try:
-        keys = np.array(keys)
-        condition = np.array([key in kwargs for key in keys])
+        condition = [key in kwargs for key in keys]
         if any(condition) == False:
             return default
         return kwargs[keys[condition][0]]
@@ -71,7 +69,7 @@ def getasany(keys, default=None, **kwargs):
 
 def countkwargs(fnc: Callable, **kwargs):
     assert callable(fnc)
-    return np.sum(list(map(fnc, kwargs.keys())))
+    return sum(list(map(fnc, kwargs.keys())))
 
 
 if __name__ == '__main__':

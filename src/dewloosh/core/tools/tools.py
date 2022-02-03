@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import time
 import sys
-import numpy as np
 from collections import Iterable
 import six
 
@@ -38,6 +37,10 @@ def float_to_str_sig(value, *args, sig: int=6, atol: float=1e-7, **kwargs):
                 value = 0.0
         return floatformatter(sig=sig).format(value)
     else:
+        try:
+            import numpy as np
+        except ImportError:
+            raise ImportError("You need numpy for this.")
         value = np.array(value)
         if atol is not None:
             inds = np.where(np.abs(value) < atol)[0]
