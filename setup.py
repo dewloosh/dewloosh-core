@@ -56,7 +56,7 @@ setup(
     download_url = _download_url,
 	packages=find_namespace_packages(where='src', include=['dewloosh.*']),
 	classifiers=[
-        'Development Status :: 3 - Beta',     
+        'Development Status :: 5 - Production/Stable',     
         'License :: OSI Approved :: MIT License',   
         'Programming Language :: Python :: 3',
 		'Operating System :: OS Independent'
