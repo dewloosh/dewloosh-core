@@ -9,10 +9,11 @@ class Wrapper:
     """
     Wrapper base class that
         (a) wraps an existing object at object creation provided as a keyword
-            argument with wrapkey
+            argument with `Wrapper.wrapkey`
         (b) wraps an existing object at object creation if it is a positional
-            argument and an instance of wraptype
-        (b) wraps the object wraptype(*args, **kwargs)
+            argument and an instance of `Wrapper.wraptype`
+        (b) wraps the object Wrapper.wraptype(*args, **kwargs) if 
+            `Wrapper.wraptype` is not None 
     """
     wrapkey = 'wrap'
     wraptype = NoneType
