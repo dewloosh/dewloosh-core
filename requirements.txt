@@ -1,5 +1,3 @@
 setuptools
 wheel
 six
-numpy
-numba
