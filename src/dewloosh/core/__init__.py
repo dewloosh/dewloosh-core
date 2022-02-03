@@ -3,7 +3,7 @@ from dewloosh.core.types.library import Library
 from typing import Callable
 import numpy as np
 
-__version__ = "0.0.1"
+__version__ = "1.0.0"
 __description__ = "Common developer utilities and base classes to support other dewloosh packages."
 
 
