@@ -137,9 +137,11 @@ class OrderedDefaultDict(OrderedDict):
     def items(self, *args, deep=False, return_address=False, **kwargs):
         if deep:
             if return_address:
-                return dictparser(self)
+                for k, v in dictparser(self):
+                    yield k, v
             else:
-                return parseitems(self)
+                for k, v in parseitems(self):
+                    yield k, v
         else:
             for k, v in super().items():
                 yield k, v
@@ -334,9 +336,9 @@ def dictparser(d: dict = None, address=[], *args, dtype=dict, **kwargs):
                 yield data
         else:
             yield subaddress, value
-            
 
-def parsedicts_addr(d: dict = None, address=[], *args, inclusive=True, 
+
+def parsedicts_addr(d: dict = None, address=[], *args, inclusive=True,
                     dtype=dict, deep=True, **kwargs):
     if inclusive:
         if isinstance(d, dtype):
@@ -348,9 +350,9 @@ def parsedicts_addr(d: dict = None, address=[], *args, inclusive=True,
             yield addr, value
             if deep:
                 for subaddr, subval in \
-                    parsedicts_addr(value, addr, 
+                    parsedicts_addr(value, addr,
                                     inclusive=False, dtype=dtype):
-                        yield subaddr, subval
+                    yield subaddr, subval
 
 
 def parsedicts(d: dict = None, *args, inclusive=True, dtype=dict,
@@ -363,8 +365,8 @@ def parsedicts(d: dict = None, *args, inclusive=True, dtype=dict,
             yield value
             if deep:
                 for subvalue in \
-                    parsedicts(value, inclusive=False, dtype=dtype):
-                        yield subvalue
+                        parsedicts(value, inclusive=False, dtype=dtype):
+                    yield subvalue
 
 
 if __name__ == '__main__':
