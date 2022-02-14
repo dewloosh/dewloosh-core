@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
-from dewloosh.core.types.numberedentity import UniqueNumbered
 import numpy as np
+
+from .numberedentity import UniqueNumbered
 
 
 class NumberedList(list):

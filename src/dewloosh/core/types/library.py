@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
-from dewloosh.core.types.defaultdict import OrderedDictCollection, \
-    parsedicts
-from dewloosh.core.tools import issequence
+from .defaultdict import OrderedDictCollection, parsedicts
+from ..tools import issequence
 
 
 class Library(OrderedDictCollection):

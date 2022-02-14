@@ -2,7 +2,8 @@
 from typing import Union, Callable
 from collections import OrderedDict
 from copy import deepcopy, copy
-from dewloosh.core.tools import issequence
+
+from ..tools import issequence
 
 
 __all__ = ["DefaultDict", "OrderedDefaultDict", "NestedDict",

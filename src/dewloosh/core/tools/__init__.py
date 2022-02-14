@@ -1,3 +1,3 @@
 # -*- coding: utf-8 -*-
-from dewloosh.core.tools.tools import *
-from dewloosh.core.tools.kwargtools import *
+from .tools import *
+from .kwargtools import *
