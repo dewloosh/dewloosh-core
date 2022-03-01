@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collections import Iterable
+from collections.abc import Iterable
 from typing import Callable
 
 
@@ -60,11 +60,25 @@ def getallfromkwargs(keys, default=None, **kwargs):
 def getasany(keys, default=None, **kwargs):
     try:
         condition = [key in kwargs for key in keys]
-        if any(condition) == False:
+        if not any(condition) == True:
             return default
-        return kwargs[keys[condition][0]]
+        return kwargs[keys[condition.index(True)]]
     except Exception:
         return None
+    
+
+def find_as_any(keys, default=None, **kwargs):
+    condition = [key in kwargs for key in keys]
+    if not any(condition) == True:
+        return default
+    return kwargs[keys[condition.index(True)]]
+
+
+def pop_as_any(keys, default=None, **kwargs):
+    condition = [key in kwargs for key in keys]
+    if not any(condition) == True:
+        return default
+    return kwargs.pop(keys[condition.index(True)])
 
 
 def countkwargs(fnc: Callable, **kwargs):

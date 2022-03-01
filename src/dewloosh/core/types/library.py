@@ -20,6 +20,13 @@ class Library(OrderedDictCollection):
         assert isinstance(value, bool)
         self._locked = value
     
+    @property
+    def depth(self):
+        if self.parent is None:
+            return 0
+        else:
+            return self.parent.depth + 1
+    
     def lock(self):
         self._locked=True
         
@@ -39,7 +46,7 @@ class Library(OrderedDictCollection):
         return self.parent is None
 
     def containers(self, *args, inclusive=False, deep=True, dtype=None, **kwargs):
-        dtype = Library if dtype is None else dtype
+        dtype = self.__class__ if dtype is None else dtype
         return parsedicts(self, inclusive=inclusive, dtype=dtype, deep=deep)
 
     def __missing__(self, key):

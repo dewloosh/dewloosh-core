@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import time
 import sys
-from collections import Iterable
+from collections.abc import Iterable
 import six
 
 
