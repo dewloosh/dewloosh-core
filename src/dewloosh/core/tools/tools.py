@@ -4,6 +4,8 @@ import sys
 from collections.abc import Iterable
 import six
 
+__all__ = ['float_to_str_sig', 'floatformatter', 'issequence']
+
 
 def floatformatter(*args, sig=6, **kwargs):
     return "{" + "0:.{}g".format(sig) + "}"
