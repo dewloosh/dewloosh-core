@@ -22,3 +22,7 @@ def fullpath_to_name(fullpath: str):
 
 def fullpath_to_ext(fullpath: str):
     return dir_name_ext(fullpath)[2]
+
+
+def compose_fullpath(dirpath, name, ext):
+    return "\\".join([dirpath, '.'.join([name, ext])])
