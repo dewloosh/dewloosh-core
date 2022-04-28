@@ -23,3 +23,11 @@ def squeeze(default=True):
         return inner
     return decorator
 
+
+def config(*args, **kwargs):
+    def decorator(fnc: Callable):
+        def inner(*args, **kwargs):
+            return fnc(*args, **kwargs)
+        return inner
+    return decorator
+
