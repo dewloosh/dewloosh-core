@@ -85,7 +85,7 @@ class Wrapper:
             return super().__setitem__(index, value)
         except Exception:
             try:
-                return self._wrapped.__setitem__(index,value)
+                return self._wrapped.__setitem__(index, value)
             except Exception:
                 raise TypeError("'{}' object does not support "
                                 "item assignment".format(

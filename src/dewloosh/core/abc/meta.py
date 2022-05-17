@@ -16,6 +16,11 @@ class ABCMeta_Weak(ABCMeta):
 
     @staticmethod
     def _get_cls_methods(namespace, nomagic=False):
+        """
+        Returns the callable items in the namespace of the class.
+        If `nomagic=False`, magic functions with trailing double 
+        underscores are not returned.
+        """
         if not nomagic:
             return {name for name, value in namespace.items()
                     if callable(value)}

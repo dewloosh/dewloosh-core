@@ -15,13 +15,10 @@ class Signature(dict):
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-        if 'abstract' in args:
-            setattr(self, 'isabstract', True)
-        else:
-            setattr(self, 'isabstract', False)
+        setattr(self, 'isabstract', 'abstract' in args)
 
     @classmethod
-    def from_func(cls, funcobj, *axioms, **kwargs):
+    def from_function(cls, funcobj, *axioms, **kwargs):
 
         if getattr(funcobj, 'isabstractoperation', False):
             sig = Signature('abstract', **kwargs)
@@ -36,8 +33,8 @@ class Signature(dict):
 
         params = signature(funcobj).parameters
         if 'args' in params or 'kwargs' in params:
-            raise TypeError('Operation can only have a finite number '
-                            'of arguments!')
+            raise TypeError(
+                'Operation can only have a finite number of arguments!')
         if 'self' in params or 'cls' in params:
             sig['arity'] = len(params)-1
         else:
@@ -80,17 +77,17 @@ class Signature(dict):
 
         return sig
 
-    def compatible_func(self, other : 'Signature') -> bool:
+    def compatible_function(self, other: 'Signature') -> bool:
         """
         Returns True if two instances are compatible in terms of
         domain type and result type.
         """
-        if not isinstance(other, Signature) :
+        if not isinstance(other, Signature):
             return False
 
-        #check domain types
+        # check domain types
         for type1, type2 in zip(self['dtype'], other['dtype']):
-            if type1 == Any :
+            if type1 == Any:
                 continue
             elif isinstance(type1, _GenericAlias):
                 if not isinstance(type2, _GenericAlias):
@@ -98,28 +95,28 @@ class Signature(dict):
                     if type2 not in typeargs:
                         return False
                 else:
-                    if type1 != type2 :
+                    if type1 != type2:
                         return False
             else:
-                if type1 != type2 :
+                if type1 != type2:
                     return False
 
-        #check result type
+        # check result type
         if isinstance(self['rtype'], _GenericAlias):
             if not isinstance(other['rtype'], _GenericAlias):
                 typeargs = self['rtype'].__dict__['__args__']
-                if not other['rtype'] in typeargs :
+                if not other['rtype'] in typeargs:
                     return False
             else:
-                if self['rtype'] != other['rtype']  :
+                if self['rtype'] != other['rtype']:
                     return False
         elif self['rtype'] != Any:
-            if self['rtype'] != other['rtype']  :
+            if self['rtype'] != other['rtype']:
                 return False
 
         return True
 
-    def accepts_func(self, other : 'Signature') -> bool:
+    def accepts_property(self, other: 'Signature') -> bool:
         """
         Returns True if other (implemented operation's signature) is
         compatible to self (abstract operation's signature).
@@ -129,12 +126,12 @@ class Signature(dict):
         """
         if any([not self.isabstract, other.isabstract]):
             return False
-        if not self.compatible_op(other) :
+        if not self.compatible_op(other):
             return False
         if not self['name'] == other['name']:
             return False
 
-        for key,value in self.items():
+        for key, value in self.items():
             if key not in ['rtype', 'dtype']:
                 if key in other:
                     if isinstance(value, frozenset) and \
@@ -148,14 +145,14 @@ class Signature(dict):
                     return False
         return True
 
-    def update_func(self, other : 'Signature'):
+    def update_function(self, other: 'Signature'):
         """
         Updates self with the content of other. Both must be abstracts.
         """
         assert isinstance(other, Signature)
         assert self.isabstract and other.isabstract
         assert self.compatible_op(other)
-        for key,value in other.items():
+        for key, value in other.items():
             if key not in ['rtype', 'dtype']:
                 if isinstance(value, frozenset):
                     if key in self and isinstance(self[key], frozenset):
@@ -168,7 +165,7 @@ class Signature(dict):
                     self[key] = value
         return
 
-    def accepts_prop(self, value : Any = None) -> bool:
+    def accepts_property(self, value: Any = None) -> bool:
         """
         Returns True if other (implemented attribute's signature) is
         compatible to self (abstract attribute's signature).
@@ -179,7 +176,7 @@ class Signature(dict):
         if value is None:
             return False
 
-        #check result type
+        # check result type
         if isinstance(self['rtype'], _GenericAlias):
             if not isinstance(type(value), _GenericAlias):
                 typeargs = self['rtype'].__dict__['__args__']
@@ -193,5 +190,5 @@ class Signature(dict):
                 return False
         return True
 
-    def accepts_params(self, *args):
+    def accepts_parameters(self, *args):
         raise NotImplementedError

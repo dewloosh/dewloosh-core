@@ -31,3 +31,10 @@ def config(*args, **kwargs):
         return inner
     return decorator
 
+
+def is_none_or_false(a):
+    if isinstance(a, bool):
+        return not a
+    elif a is None:
+        return True
+    return False
