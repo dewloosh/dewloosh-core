@@ -6,6 +6,9 @@ __all__ = ["ABCMeta_Weak", "ABCMeta_Strong", "ABCMeta_Safe", "ABC_Strong",
            "ABC_Weak", "ABC_Safe"]
 
 
+def _is_callable(n, v): return callable(v) and ('__' not in n)
+
+
 class ABCMeta_Weak(ABCMeta):
     """
     Standard python metaclass. It follows weak abstraction in the meaning, that
@@ -25,9 +28,46 @@ class ABCMeta_Weak(ABCMeta):
             return {name for name, value in namespace.items()
                     if callable(value)}
         else:
-            def cond(n, v): return callable(v) and ('__' not in n)
             return {name for name, value in namespace.items()
-                    if cond(name, value)}
+                    if _is_callable(name, value)}
+            
+    @staticmethod
+    def _get_cls_abstracts(namespace):
+        """
+        Returns the callable items in the namespace of the class.
+        If `nomagic=False`, magic functions with trailing double 
+        underscores are not returned.
+        """            
+        return getattr(namespace, "__abstractmethods__", set())
+            
+    @staticmethod
+    def _get_base_methods(bases):
+        """
+        Returns the callable items in the namespace of the class.
+        If `nomagic=False`, magic functions with trailing double 
+        underscores are not returned.
+        """
+        
+        base_methods = {}
+        for base in bases:
+            base_methods[base.__name__] = {}
+            for k, v in base.__dict__.items():
+                if _is_callable(k, v):
+                    base_methods[base.__name__][k] = v
+        return base_methods
+                
+    @staticmethod
+    def _get_base_abstracts(bases):
+        """
+        Returns the callable items in the namespace of the class.
+        If `nomagic=False`, magic functions with trailing double 
+        underscores are not returned.
+        """
+        base_abc_methods = {}
+        for base in bases:
+            base_abc_methods[base.__name__] = \
+                getattr(base, "__abstractmethods__", set())
+        return base_abc_methods
 
 
 class ABC_Weak(metaclass=ABCMeta_Weak):
