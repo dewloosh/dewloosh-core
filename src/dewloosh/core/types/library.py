@@ -89,16 +89,4 @@ class Library(OrderedDictCollection):
 
 
 if __name__ == '__main__':
-
-    h = Library()
-    h['a', 'b', 'c', 'e'] = 1
-    #h['a']['b']['c']['e'] = 1
-    h['a']['b']['d'] = 2
-
-    b = h['a', 'b']
-    b['e'] = 3
-    b['f'] = 1, 2, 3
-    
-    for i in h.items(deep=True):
-        print(i)
-    print(len(list(h.items(deep=True))))
+    pass

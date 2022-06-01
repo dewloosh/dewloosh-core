@@ -1,7 +1,9 @@
 # -*- coding: utf-8 -*-
-from dewloosh.core.types.library import Library
 from typing import Callable
 import numpy as np
+
+from .types.library import Library
+from .abc.wrap import Wrapper
 
 __version__ = "1.0.5"
 __description__ = "Common developer utilities and base classes to support other dewloosh packages."

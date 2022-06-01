@@ -43,6 +43,10 @@ class Wrapper:
                     "Wrong type, unable to wrap object : {}". \
                     format(self._wrapped)
 
+    @property
+    def wrapped(self):
+        return self._wrapped
+    
     def wrap(self, obj=None):
         if self.wraptype is not NoneType:
             if isinstance(obj, self.wraptype):

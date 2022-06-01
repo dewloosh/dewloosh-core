@@ -2,7 +2,7 @@
 from typing import Union, Callable
 from collections import OrderedDict
 from copy import deepcopy, copy
-
+    
 from ..tools import issequence
 
 
@@ -12,8 +12,8 @@ __all__ = ["DefaultDict", "OrderedDefaultDict", "NestedDict",
 
 class DefaultDict(dict):
     """
-    Implements a defaultdict.
-    Source: http://stackoverflow.com/a/6190500/562769
+    Implements a defaultdict based on the following thread:
+        http://stackoverflow.com/a/6190500/562769
     """
 
     def __init__(self, default_factory: Callable = None, *args, **kwargs):
@@ -60,9 +60,11 @@ class DefaultDict(dict):
     def items(self, *args, deep=False, return_address=False, **kwargs):
         if deep:
             if return_address:
-                return dictparser(self)
+                for addr, v in dictparser(self):
+                    yield addr, v
             else:
-                return parseitems(self)
+                for k, v in parseitems(self):
+                    yield k, v
         else:
             for k, v in super().items():
                 yield k, v
@@ -90,8 +92,8 @@ class DefaultDict(dict):
 
 class OrderedDefaultDict(OrderedDict):
     """
-    Implements an ordered version of a defaultdict.
-    Source: http://stackoverflow.com/a/6190500/562769
+    Implements an ordered version of a defaultdict based on the following thread:
+        http://stackoverflow.com/a/6190500/562769
     """
 
     def __init__(self, default_factory: Callable = None, *args, **kwargs):
