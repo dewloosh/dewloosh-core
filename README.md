@@ -27,7 +27,7 @@ The most important tools are:
 
 ## **Documentation and Issues**
 
-Click [here](dewloosh-core.readthedocs.io) to read the documentation.
+Click [here](https://dewloosh-core.readthedocs.io/en/latest/) to read the documentation.
 
 There are no known issues.
 
