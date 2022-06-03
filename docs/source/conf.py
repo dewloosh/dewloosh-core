@@ -75,13 +75,3 @@ html_theme = 'furo'
 html_static_path = ['_static']
 
 html_title = "dewloosh.core"
-
-"""html_sidebars = {
-   '**': ['globaltoc.html', 'sourcelink.html', 'searchbox.html'],
-   'using/windows': ['windowssidebar.html', 'searchbox.html'],
-}"""
-
-"""html_theme_options = {
-    "rightsidebar": "false",
-    "relbarbgcolor": "black"
-}"""
