@@ -1,39 +1,111 @@
 # -*- coding: utf-8 -*-
-from .defaultdict import OrderedDictCollection, parsedicts
+from typing import Hashable, Union
+
 from ..tools import issequence
+from .defaultdict import OrderedDictCollection, parsedicts
+
+
+__all__ = ['Library']
+
+
+NoneType = type(None)
 
 
 class Library(OrderedDictCollection):
+    """
+    An ordered and nested dictionary class. It can be a drop-in replacement for
+    the bulit-in dictionary type, but it's more capable as it handles
+    nested dictionaries. See the documentation for examples.
+    """
 
-    def __init__(self, *args, parent=None, root=None, **kwargs):
+    def __init__(self, *args, parent=None, root=None, locked=None, **kwargs):
+        """
+        Returns a `Library` instance.
+
+        Parameters
+        ----------
+        *args : tuple, Optional
+            Extra positional arguments are forwarded to the `dict` class.
+
+        parent : `Library`, Optional
+            Parent `Library` instance. Default is `None`.
+
+        root : `Library`, Optional
+            The top-level object. It is automatically set when creating nested
+            layouts, but may be explicitly provided. Default is `None`. 
+
+        locked : bool or NoneType, Optional
+            If the object is locked, it reacts to missing keys as a regular dictionary would.
+            If it is not, a new level and a new child is created (see the examples in the docs).
+            A `None` value means that in terms of locking, the state of the object 
+            is inherited from its parent. Default is `None`.
+
+        **kargs : tuple, Optional
+            Extra keyword arguments are forwarded to the `dict` class.
+
+        """
         super().__init__(*args, **kwargs)
         self.parent = parent
         self._root = root
-        self._locked=False
-    
-    @property        
-    def locked(self):
-        return self._locked
-    
-    @locked.setter 
+        self._locked = locked
+        self._key = None
+
+    @property
+    def key(self) -> Union[Hashable, NoneType]:
+        """
+        Returns the key of the dictionary in its parent, or `None` if the 
+        object is the root.
+        """
+        return self._key
+
+    @property
+    def locked(self) -> bool:
+        """
+        Returns `True` if the object is locked. The property is equpped with a setter.
+        """
+        if self.parent is None:
+            return self._locked if isinstance(self._locked, bool) else False
+        else:
+            return self._locked if isinstance(self._locked, bool) else self.parent.locked
+
+    @locked.setter
     def locked(self, value):
         assert isinstance(value, bool)
         self._locked = value
-    
+
     @property
-    def depth(self):
+    def depth(self) -> int:
+        """
+        Retuns the depth of the actual instance in a layout, starting from 0.
+        """
         if self.parent is None:
             return 0
         else:
             return self.parent.depth + 1
-    
-    def lock(self):
-        self._locked=True
-        
-    def unlock(self):
-        self._locked=False
 
-    def root(self):
+    def lock(self):
+        """
+        Locks the layout of the dictionary. If a `Library` is locked,
+        missing keys are handled the same way as they would've been handled
+        if it was a ´dict´.        
+
+        Equivalent to ``self.locked = True``.
+        """
+        self._locked = True
+
+    def unlock(self):
+        """
+        Releases the layout of the dictionary. If a `Library` is not locked,
+        a missing key creates a new level in the layout.
+
+        Equivalent to ``self.locked = False``.
+        """
+        self._locked = False
+
+    def root(self) -> 'Library':
+        """
+        Returns the top-level object in a nested layout.
+        """
         if self.parent is None:
             return self
         else:
@@ -42,22 +114,77 @@ class Library(OrderedDictCollection):
             else:
                 return self.parent.root()
 
-    def is_root(self):
+    def is_root(self) -> bool:
+        """
+        Returns `True`, if the object is the root.
+        """
         return self.parent is None
 
     def containers(self, *args, inclusive=False, deep=True, dtype=None, **kwargs):
+        """
+        Returns all the containers in a nested layout. A dictionary in a nested layout
+        is called a container, Only if it contains other containers (it is a parent). 
+
+        Parameters
+        ----------
+        inclusive : bool, Optional
+            If `True`, the object the call is made upon also gets returned.
+            This can be important if you make the call on the root object, which most
+            of the time does not hold onto relevant data directly.
+            Default is `False`.
+
+        deep : bool, Optional
+            If `True` the parser goes into nested dictionaries.
+            Default is `True`
+
+        dtype : Any, Optional
+            Constrains the type of the returned objects.
+            Default is `None`, which means no restriction.
+
+        Returns
+        -------
+        generator
+            Returns a generator object.
+
+        Examples
+        --------
+        A simple example:
+
+        >>> from dewloosh.core import Library
+        >>> data = Library()
+        >>> data['a', 'b', 'c'] = 1
+        >>> [c.key for c in data.containers()]
+        ['a', 'b']
+
+        We can see, that dictionaries 'a' and 'b' are returned as containers, but 'c' 
+        isn't,  because it is not a parent, there are no deeper levels. 
+
+        >>> [c.key for c in data.containers(inclusive=True, deep=True)]
+        [None, 'a', 'b']
+
+        >>> [c.key for c in data.containers(inclusive=True, deep=False)]     
+        [None, 'a']
+
+        >>> [c.key for c in data.containers(inclusive=False, deep=True)]       
+        ['a', 'b']
+
+        >>> [c.key for c in data.containers(inclusive=False, deep=False)]      
+        ['a']
+
+        """
         dtype = self.__class__ if dtype is None else dtype
         return parsedicts(self, inclusive=inclusive, dtype=dtype, deep=deep)
 
     def __missing__(self, key):
-        if self._locked:
+        if self.locked:
             raise KeyError("Missing key : {}".format(key))
         else:
             return super().__missing__(key)
 
-    def __join_parent__(self, parent: 'Library'):
+    def __join_parent__(self, parent: 'Library', key: Hashable = None):
         self.parent = parent
         self._root = parent.root()
+        self._key = key
 
     def __repr__(self):
         return dict.__repr__(self)
@@ -75,7 +202,7 @@ class Library(OrderedDictCollection):
                     self[key[0]] = value
             else:
                 if isinstance(value, Library):
-                    value.__join_parent__(self)
+                    value.__join_parent__(self, key)
                 return super().__setitem__(key, value)
         except AttributeError:
             raise RuntimeError("Target is of type '{}', which is not \

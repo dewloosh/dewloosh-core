@@ -67,7 +67,7 @@ def getasany(keys, default=None, **kwargs):
         return None
     
 
-def find_as_any(keys, default=None, **kwargs):
+"""def find_as_any(keys, default=None, **kwargs):
     condition = [key in kwargs for key in keys]
     if not any(condition) == True:
         return default
@@ -78,7 +78,7 @@ def pop_as_any(keys, default=None, **kwargs):
     condition = [key in kwargs for key in keys]
     if not any(condition) == True:
         return default
-    return kwargs.pop(keys[condition.index(True)])
+    return kwargs.pop(keys[condition.index(True)])"""
 
 
 def countkwargs(fnc: Callable, **kwargs):

@@ -1,45 +1,27 @@
-# **dewloosh.core**
+# **User Guide**
 
-This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a bare metal setup.
+## **Installation**
+This is optional, but we suggest you to create a dedicated virtual enviroment at all times to avoid conflicts with your other projects. Create a folder, open a command shell in that folder and use the following command
 
-<table>
-    <tr>
-        <td>Latest Release</td>
-        <td>
-            <a href="https://pypi.org/project/dewloosh.core"/>
-            <img src="https://badge.fury.io/py/dewloosh.core.svg"/>
-        </td>
-    </tr>
-    <tr>
-        <td>License</td>
-        <td>
-            <a href="https://opensource.org/licenses/MIT"/>
-            <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
-        </td>
-    </tr>
-</table>
+```console
+>>> python -m venv venv_name
+```
 
-The most important tools are:
+Once the enviroment is created, activate it via typing
 
-* Classes `DictCollection` and `OrderedDictCollection` providing facilities to deal with nested dictionaries, allowing us to create and manipulate hierarchical data objects. 
+```console
+>>> .\venv_name\Scripts\activate
+```
 
-* A `Library` class, that takes `OrderedDictCollection` to the next level.
+`dewloosh.core` can be installed (either in a virtual enviroment or globally) from PyPI using `pip` on Python >= 3.6:
 
-* A set of abstract base classes for metaprogramming.
-
-* Various decorators, wrappers and other handy developer tools.
-
-* Some other tools for educational refrencing.
-
-## **Documentation and Issues**
-
-The documentation is on its way. Considering that this is a very thin library, this is not of primary concern at the moment, and I think the provided examples should be enough to get you going.
-
-There are no known issues.
+```console
+>>> pip install dewloosh.core
+```
 
 ## **A Quick Guide**
 
-#### Dictionaries of dictionaries of diactionaries of ...
+### Nested Dictionaries
 
 In every case where you'd want to use a `dict`, you can use a `Library` as a drop-in replacement, but on top of what a simple dictionary provides, a `Library` is more capable, as it provides a machinery to handle nested layouts. It is basically an ordered `defaultdict` with a self replicating default factory. This feature is exploited in many classes in other `dewloosh` packages, the most prominent ones being `dewloosh.geom.PolyData` and `dewloosh.solid.fem.FemMesh`.
 
@@ -110,6 +92,8 @@ It is important, that the call `obj.values(deep=True)` still returns a generator
 <generator object OrderedDefaultDict.values at 0x0000028F209D54A0>    
 ```
 
+### Wrapping and Metaprogramming
+
 #### Wrapping
 
 Wrapping may not be the most elegant solutions to inherit properties of a different class, but there are certain situations when it might save your life. One such a scenario is when you want to write an interface to a library that gets dinamically generated runtime, meaning, that the classes are simply not present at the time of writing your own code. This is when a wrapper comes handy. To wrap a dictionary, do the following:
@@ -143,7 +127,7 @@ Id we tried to wrap a dictionary now, the implementation would alter the bahavio
 dict_values([{'b': {'c': {'e': 3}, 'd': 2}}])
 ```
 
-#### Abstract Classes and Metaprogramming
+#### Metaprogramming
 
 The submodule `dewloosh.core.abc.meta` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party library, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
 
@@ -175,7 +159,7 @@ Another important situation arises with abstract methods. Python provides a deco
 >>>     ...
 ```
 
-#### Abstract Class Properties
+### Abstract Class Properties
 
 Along the same thoughts, sometimes we want to ensure the existence of some class
 properties when building complex objects with multiple base classes. This can be done using a special decorator:
@@ -196,7 +180,7 @@ class BaseClassA(ABC):
         return
 ```
 
-#### Infix Operators
+### Infix Operators
 
 Infix operators allow for a fancy way of defining binary operations using the operators '<<', '>>' and '|'.
 
@@ -211,39 +195,7 @@ Infix operators allow for a fancy way of defining binary operations using the op
 6
 ```
 
-## **Installation**
-This is optional, but we suggest you to create a dedicated virtual enviroment at all times to avoid conflicts with your other projects. Create a folder, open a command shell in that folder and use the following command
 
-```console
->>> python -m venv venv_name
-```
 
-Once the enviroment is created, activate it via typing
 
-```console
->>> .\venv_name\Scripts\activate
-```
 
-`dewloosh.core` can be installed (either in a virtual enviroment or globally) from PyPI using `pip` on Python >= 3.6:
-
-```console
->>> pip install dewloosh.core
-```
-
-## **Testing**
-
-To run all tests, open up a console in the root directory of the project and type the following
-
-```console
->>> python -m unittest
-```
-
-## **Dependencies**
-
-The package has no dependencies.
-
-## **Acknowledgement**
-
-## **License**
-
-This package is licensed under the MIT license.
