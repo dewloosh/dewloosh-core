@@ -87,7 +87,7 @@ def float_to_str_sig(value, *args, sig: int=6, atol: float=1e-7,
         return list(map(f, value))
 
 
-def timer(fnc : Callable) -> float:
+def timeit(fnc : Callable) -> float:
     """
     A simple decorator to measure execution time of a function.
     """
@@ -99,7 +99,7 @@ def timer(fnc : Callable) -> float:
     return inner
 
 
-def SuppressedFunction(fnc: Callable) -> Callable:
+def suppress(fnc: Callable) -> Callable:
     """
     Decorator that wraps a function to suppress it's calls to `print`.
     """
@@ -183,28 +183,4 @@ def issequence(arg) -> bool:
     return (
         isinstance(arg, Iterable)
         and not isinstance(arg, six.string_types)
-    )
-
-
-if __name__ == '__main__':
-
-    lrange = latinrange(5, start='i')
-    grange = greekrange(5)
-    orange = ordrange(5)
-    arange = arabicrange(5, start=1)
-
-    abc = alphabet('latin', start='i')
-    for i in range(6):
-        print(next(abc))
-
-    abc = alphabet(start='u')
-    for i in range(6):
-        print(next(abc))
-        
-    abc = alphabet('u', start='\x03')
-    for i in range(4):
-        print(next(abc))
-    
-    abc = alphabet('u', start='\x03')
-    pokerstr = [next(abc) for _ in range(4)]
-    print("{} {} {} {}".format(*pokerstr))
+    )  

@@ -205,15 +205,11 @@ class Library(OrderedDictCollection):
                     value.__join_parent__(self, key)
                 return super().__setitem__(key, value)
         except AttributeError:
-            raise RuntimeError("Target is of type '{}', which is not \
-                               a container.".format(type(d)))
+            msg = "Target is of type '{}', which is not a container."
+            raise RuntimeError(msg.format(type(d)))
         except KeyError:
             return self.__missing__(key)
 
     def default_factory(self):
         cls = type(self)
         return cls(parent=self, root=self.root())
-
-
-if __name__ == '__main__':
-    pass

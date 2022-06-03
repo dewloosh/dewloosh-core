@@ -85,10 +85,3 @@ def countkwargs(fnc: Callable, **kwargs):
     assert callable(fnc)
     return sum(list(map(fnc, kwargs.keys())))
 
-
-if __name__ == '__main__':
-
-    d = {'E1': 1, 'E2': 2, 'G12': 12, 'NU23': 0}
-    nE = countkwargs(lambda s: s[0] == 'E', **d)
-    nG = countkwargs(lambda s: s[0] == 'G', **d)
-    nNU = countkwargs(lambda s: s[0:2] == 'NU', **d)

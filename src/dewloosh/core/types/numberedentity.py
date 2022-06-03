@@ -23,36 +23,21 @@ class Numbered(ABC):
 
 class Unique(ABC):
 
-    def __init__(self, *args, key=None, **kwargs):
+    def __init__(self, *args, key=None, UUID=None, UID=None, GUID=None, 
+                 GID=None, ID=None, LID=None, **kwargs):
         super().__init__(*args, **kwargs)
-        if 'UUID' in kwargs:
-            UUID = kwargs.pop('UUID')
-        elif 'UID' in kwargs:
-            UUID = kwargs.pop('UID')
-        else:
-            UUID = uuid.uuid4()
-
-        if 'GUID' in kwargs:
-            GUID = kwargs.pop('GUID')
-        elif 'GID' in kwargs:
-            GUID = kwargs.pop('GID')
-        else:
-            GUID = None
-
-        if 'ID' in kwargs:
-            ID = kwargs.pop('ID')
-        elif 'LID' in kwargs:
-            ID = kwargs.pop('LID')
-        else:
-            ID = None
-
-        self._UUID = UUID
-        self._ID = ID
-        self._GUID = GUID
+        UID = UUID if UUID is not None else UID
+        UID = UID if UID is not None else uuid.uuid4()
+        self._UUID = UID
+        self._ID = ID if ID is not None else LID
+        self._GUID = GUID if GUID is not None else GID
         self._key = key
 
     def __eq__(self, other):
-        return isinstance(other, Unique) and self.UUID == other.UUID
+        return hasattr(other, 'UUID') and self.UUID == other.UUID
+    
+    def __hash__(self):
+        return hash(self.to_int)
 
     @property
     def to_hex(self):
@@ -102,9 +87,6 @@ class Unique(ABC):
     def UID(self):
         return self._UUID
 
-    def __hash__(self):
-        return self.to_int()
-
     @property
     def key(self):
         return self._key if self._key is not None else self._UUID
@@ -117,11 +99,6 @@ class Unique(ABC):
         return str(self.key)
 
 
-class UniqueNumbered(Numbered, Unique):
+class UniqueNumbered(Unique, Numbered):
     ...
 
-
-if __name__ == '__main__':
-
-    u1 = UniqueNumbered()
-    u2 = UniqueNumbered(key='somekey')

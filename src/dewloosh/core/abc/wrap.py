@@ -20,6 +20,7 @@ class Wrapper:
 
     def __init__(self, *args, **kwargs):
         super().__init__()
+        self._wrapped = None
         self.wrap(kwargs.get(self.wrapkey, None))
 
         if self._wrapped is None and self.wraptype is not NoneType:
@@ -33,8 +34,8 @@ class Wrapper:
                     if self.wraptype is not NoneType:
                         self._wrapped = self.wraptype(*args, **kwargs)
                 except Exception:
-                    raise ValueError("Wrapped class '{}' cannot be "
-                                     "initiated with these "
+                    raise ValueError("Wrapped class '{}' cannot be " + \
+                                     "initiated with these " + \
                                      "arguments".format(
                                          self.wraptype.__name__))
         else:
@@ -130,48 +131,3 @@ def wrap(obj : object) -> Wrapper:
     Wraps an object and returns the wrapper.
     """
     return Wrapper(wrap=obj)
-
-
-if __name__ == '__main__' :
-    
-    class Wrapped:
-
-        def foo(self):
-            print('foo in object to be wrapped')
-
-        def boo(self):
-            print('boo in object to be wrapped')
-
-    @customwrapper(wrapkey='wrapkey', wraptype=Wrapped)
-    class CustomWrapper:
-
-        def boo(self):
-            print('boo in custom wrapper')
-            
-    @wrapper
-    class DefaultWrapper:
-
-        def boo(self):
-            print('boo in default wrapper')
-            
-    
-    class DefaultWrapper2(Wrapper):
-
-        def boo(self):
-            print('boo in default wrapper')
-
-    cw = CustomWrapper(wrapkey=Wrapped())
-    cw.foo()
-    cw.boo()
-    
-    dw = DefaultWrapper(wrap=Wrapped())
-    dw.foo()
-    dw.boo()
-    
-    dw2 = DefaultWrapper(wrap=Wrapped())
-    dw2.foo()
-    dw2.boo()
-    
-    w = wrap(Wrapped())
-    w.foo()
-    w.boo()
