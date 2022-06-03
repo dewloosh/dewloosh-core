@@ -177,17 +177,17 @@ properties when building complex objects with multiple base classes. This can be
 ```python
 >>> from dewloosh.core.abc.decorators import abstract_class_property
 >>> from abc import ABC
-
-@abstract_class_property(prop1=int, prop2=float})
-class BaseClassA(ABC):
-
-    prop1: int
-    prop2: list
-
-    def __init__(self):
-        self.prop2 = [3, 4]
-        super().__init__()
-        return
+>>> 
+>>> @abstract_class_property(prop1=int, prop2=float})
+>>> class BaseClassA(ABC):
+>>> 
+>>>     prop1: int
+>>>     prop2: list
+>>> 
+>>>     def __init__(self):
+>>>         self.prop2 = [3, 4]
+>>>         super().__init__()
+>>>         return
 ```
 
 #### Infix Operators
