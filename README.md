@@ -1,23 +1,17 @@
 # **dewloosh.core**
 
+<a href='https://dewloosh-core.readthedocs.io/en/latest/?badge=latest'>
+    <img src='https://readthedocs.org/projects/dewloosh-core/badge/?version=latest' alt='Documentation Status' />
+</a>
+<a href="https://pypi.org/project/dewloosh.core"/>
+            <img src="https://badge.fury.io/py/dewloosh.core.svg"/>
+</a>
+<a href="https://opensource.org/licenses/MIT"/>
+            <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
+</a>
+
 This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a bare metal setup.
 
-<table>
-    <tr>
-        <td>Latest Release</td>
-        <td>
-            <a href="https://pypi.org/project/dewloosh.core"/>
-            <img src="https://badge.fury.io/py/dewloosh.core.svg"/>
-        </td>
-    </tr>
-    <tr>
-        <td>License</td>
-        <td>
-            <a href="https://opensource.org/licenses/MIT"/>
-            <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
-        </td>
-    </tr>
-</table>
 
 The most important tools are:
 
@@ -33,7 +27,7 @@ The most important tools are:
 
 ## **Documentation and Issues**
 
-The documentation is on its way. Considering that this is a very thin library, this is not of primary concern at the moment, and I think the provided examples should be enough to get you going.
+Click [here](dewloosh-core.readthedocs.io) to read the documentation.
 
 There are no known issues.
 
