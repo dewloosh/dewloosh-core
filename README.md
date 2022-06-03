@@ -10,15 +10,9 @@
             <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
 </a>
 
-<div class="panel panel-warning">
-**Warning**
-{: .panel-heading}
-<div class="panel-body">
 
-WARNING DESCRIPTION
-
-</div>
-</div>
+> **Warning**
+> This package is under active development and in an **alpha stage**. Come back later, or star the repo to make sure you don’t miss the first stable release!
 
 This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a bare metal setup.
 
