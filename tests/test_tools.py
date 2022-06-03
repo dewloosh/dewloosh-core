@@ -3,7 +3,6 @@ import unittest
 
 import math
 
-from dewloosh.core import squeeze, config, is_none_or_false
 from dewloosh.core.tools.tools import float_to_str_sig, issequence, alphabet, \
     ordrange, latinrange, urange, greekrange, arabicrange, suppress, timeit
 from dewloosh.core.tools.kwargtools import isinkwargs, allinkwargs, anyinkwargs, \
