@@ -236,8 +236,6 @@ To run all tests, open up a console in the root directory of the project and typ
 
 The package has no dependencies.
 
-## **Acknowledgement**
-
 ## **License**
 
 This package is licensed under the MIT license.
