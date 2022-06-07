@@ -12,7 +12,7 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+#sys.path.insert(0, os.path.abspath('.'))
 sys.path.insert(0, os.path.abspath('../../src/'))
 
 
@@ -36,10 +36,10 @@ extensions = [
     'myst_parser',  # pip install myst-parser for this
     
     # to plot summary about durations of file generations
-    'sphinx.ext.duration',
+    #'sphinx.ext.duration',
     
     # to test code snippets in docstrings
-    'sphinx.ext.doctest',
+    #'sphinx.ext.doctest',
     
     # for automatic exploration of the source files
     'sphinx.ext.autodoc',
@@ -52,7 +52,7 @@ extensions = [
     
     #'sphinx.ext.mathjax',
     
-    'sphinx.ext.coverage',
+    #'sphinx.ext.coverage',
     ]
 
 # set up InterSphinx mapping
