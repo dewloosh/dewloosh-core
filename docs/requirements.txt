@@ -1,4 +1,4 @@
 myst_parser
 furo
 numpy
-dewloosh.core
+
