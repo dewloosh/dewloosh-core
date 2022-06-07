@@ -12,7 +12,8 @@
 #
 import os
 import sys
-sys.path.insert(0, os.path.abspath('.'))
+#sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('../../src/dewloosh/core/'))
 
 
 # -- Project information -----------------------------------------------------
@@ -47,7 +48,9 @@ extensions = [
     'sphinx.ext.intersphinx',
     
     # Napoleon is a extension that enables Sphinx to parse both NumPy and Google style docstrings
-    'sphinx.ext.napoleon'
+    'sphinx.ext.napoleon',
+    
+    'sphinx.ext.mathjax',
     ]
 
 # set up InterSphinx mapping
@@ -56,10 +59,15 @@ intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
 
+# The suffix(es) of source filenames.
+# You can specify multiple suffix as a list of string:
+source_suffix = ['.rst', '.md']
+#source_suffix = '.rst'
+
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = []
+exclude_patterns = ['build']
 
 
 # -- Options for HTML output -------------------------------------------------
