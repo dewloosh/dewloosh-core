@@ -45,18 +45,18 @@ extensions = [
     'sphinx.ext.autodoc',
     
     # to enable cross referencing other documents on the internet
-    'sphinx.ext.intersphinx',
+    #'sphinx.ext.intersphinx',
     
     # Napoleon is a extension that enables Sphinx to parse both NumPy and Google style docstrings
     'sphinx.ext.napoleon',
     
-    'sphinx.ext.mathjax',
+    #'sphinx.ext.mathjax',
     
     'sphinx.ext.coverage',
     ]
 
 # set up InterSphinx mapping
-intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
+#intersphinx_mapping = {'python': ('https://docs.python.org/3', None)}
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ['_templates']
@@ -69,7 +69,7 @@ source_suffix = ['.rst', '.md']
 # List of patterns, relative to source directory, that match files and
 # directories to ignore when looking for source files.
 # This pattern also affects html_static_path and html_extra_path.
-exclude_patterns = ['build']
+exclude_patterns = []
 
 
 # -- Options for HTML output -------------------------------------------------
