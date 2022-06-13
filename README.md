@@ -21,7 +21,7 @@ The most important tools are:
 
 * Classes `DictCollection` and `OrderedDictCollection` providing facilities to deal with nested dictionaries, allowing us to create and manipulate hierarchical data objects. 
 
-* A `Library` class, that takes `OrderedDictCollection` to the next level.
+* A `Deepdict` class, that takes `OrderedDictCollection` to the next level.
 
 * A set of abstract base classes for metaprogramming.
 
@@ -39,15 +39,15 @@ There are no known issues.
 
 #### Dictionaries of dictionaries of diactionaries of ...
 
-In every case where you'd want to use a `dict`, you can use a `Library` as a drop-in replacement, but on top of what a simple dictionary provides, a `Library` is more capable, as it provides a machinery to handle nested layouts. It is basically an ordered `defaultdict` with a self replicating default factory. This feature is exploited in many classes in other `dewloosh` packages, the most prominent ones being `dewloosh.geom.PolyData` and `dewloosh.solid.fem.FemMesh`.
+In every case where you'd want to use a `dict`, you can use a `Deepdict` as a drop-in replacement, but on top of what a simple dictionary provides, a `Deepdict` is more capable, as it provides a machinery to handle nested layouts. It is basically an ordered `defaultdict` with a self replicating default factory. This feature is exploited in many classes in other `dewloosh` packages, the most prominent ones being `dewloosh.geom.PolyData` and `dewloosh.solid.fem.FemMesh`.
 
 
 ```python
->>> from dewloosh.core import Library
->>> data = Library()
+>>> from dewloosh.core import Deepdict
+>>> data = Deepdict()
 ```
 
-A `Library` is essentially a nested default dictionary. Being nested refers to the fact that you can do this:
+A `Deepdict` is essentially a nested default dictionary. Being nested refers to the fact that you can do this:
 
 ```python
 >>> data['a']['b']['c']['e'] = 1
@@ -81,15 +81,15 @@ The key point is that we loop over a pure `dict` instance, we get
 ['a']    
 ```
 
-But if we use a `Library` class and the option `deep=True` when accessing
+But if we use a `Deepdict` class and the option `deep=True` when accessing
 keys, values or items of dictionaries, the following happens: 
 
 ```python
->>> [k for k in Library(data).keys(deep=True)]
+>>> [k for k in Deepdict(data).keys(deep=True)]
 ['e', 'd']    
 ```
 
-We can see, that in this case, iteration goes over keys, that actually hold on to some data, and does not return the containers themselves. If we do the same experiment with the values, it shows that the `Library` only returns the leafs of the data-tree and the behaviour is fundamentally different:
+We can see, that in this case, iteration goes over keys, that actually hold on to some data, and does not return the containers themselves. If we do the same experiment with the values, it shows that the `Deepdict` only returns the leafs of the data-tree and the behaviour is fundamentally different:
 
 ```python
 >>> [k for k in data.values()]
@@ -97,20 +97,20 @@ We can see, that in this case, iteration goes over keys, that actually hold on t
 ```
 
 ```python
->>> [k for k in Library(data).values(deep=True)]
+>>> [k for k in Deepdict(data).values(deep=True)]
 [3, 2]    
 ```
 
 It is important, that the call `obj.values(deep=True)` still returns a generator object, which makes it memory efficient when looping over large datasets.
 
 ```python
->>> Library(data).values(deep=True)
+>>> Deepdict(data).values(deep=True)
 <generator object OrderedDefaultDict.values at 0x0000028F209D54A0>    
 ```
 
 #### Wrapping
 
-Wrapping may not be the most elegant solutions to inherit properties of a different class, but there are certain situations when it might save your life. One such a scenario is when you want to write an interface to a library that gets dinamically generated runtime, meaning, that the classes are simply not present at the time of writing your own code. This is when a wrapper comes handy. To wrap a dictionary, do the following:
+Wrapping may not be the most elegant solutions to inherit properties of a different class, but there are certain situations when it might save your life. One such a scenario is when you want to write an interface to a Deepdict that gets dinamically generated runtime, meaning, that the classes are simply not present at the time of writing your own code. This is when a wrapper comes handy. To wrap a dictionary, do the following:
 
 ```python
 >>> from dewloosh.core import Wrapper
@@ -143,12 +143,12 @@ dict_values([{'b': {'c': {'e': 3}, 'd': 2}}])
 
 #### Abstract Classes and Metaprogramming
 
-The submodule `dewloosh.core.abc.meta` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party library, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
+The submodule `dewloosh.core.abc.meta` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party Deepdict, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
 
 Running the following code throws an error at design time, because `foo` is already implemented in the parent class:
 
 ```python
->>> from dewloosh.core.abc.meta import ABC_Safe
+>>> from dewloosh.core.abc import ABC_Safe
 >>> 
 >>> class Parent(ABC_Safe):
 >>>     def foo(self):
@@ -162,7 +162,7 @@ Running the following code throws an error at design time, because `foo` is alre
 Another important situation arises with abstract methods. Python provides a decorator for this out of the box, but again, not implemented abstract methods only show up at rumtime, which can easily be no time in the world of interpreted languages. The meta submodul is equipped with another abstract class called `ABC_Strong`, that makes you able to be informed about missing function implementations of a class right at design time. Here 'Strong' refers to the stronger requirement imposed on abstract methods. An abstract method in a child class is either implemented, or decorated with the `abstractmethod` decorator, which passes the ball to the next child. Obviously, you don't get to runtime, unless you implement all the required abstract classes. This is also useful if we want to create a template object, that provides instructions on how to complete a skeleton to have a working solution. A simple example to illustrate what happens if you brake the rules is the following:
 
 ```python
->>> from dewloosh.core.abc.meta import ABC_Strong
+>>> from dewloosh.core.abc import ABC_Strong
 >>> 
 >>> class Parent(ABC_Strong):
 >>>     @abstractmethod    
@@ -179,7 +179,7 @@ Along the same thoughts, sometimes we want to ensure the existence of some class
 properties when building complex objects with multiple base classes. This can be done using a special decorator:
 
 ```python
->>> from dewloosh.core.abc.decorators import abstract_class_property
+>>> from dewloosh.core.acpimport abstract_class_property
 >>> from abc import ABC
 >>> 
 >>> @abstract_class_property(prop1=int, prop2=float})
