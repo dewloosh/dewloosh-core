@@ -1,35 +1,38 @@
 # -*- coding: utf-8 -*-
 from inspect import signature, Parameter
-from typing import Any, Hashable
+from typing import Any
 from typing import Generic as _GenericAlias
 
 
-__all__ = ["Signature", "ishashable"]
-
-
-def ishashable(obj):
-    return isinstance(obj, Hashable)
+__all__ = ["Signature"]
 
 
 class Signature(dict):
+    """
+    A class to differentiate between function declarations using their
+    type signatures. It helps to decide if an implementation satisfies
+    some requirements imposed on a class.
+    """
+    
+    __abckey__ = 'isabstractoperation'
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
         setattr(self, 'isabstract', 'abstract' in args)
 
     @classmethod
-    def from_function(cls, funcobj, *axioms, **kwargs):
+    def from_function(cls, funcobj, *attrs, **kwargs):
 
-        if getattr(funcobj, 'isabstractoperation', False):
+        if getattr(funcobj, cls.__abckey__, False):
             sig = Signature('abstract', **kwargs)
         else:
             sig = Signature(**kwargs)
 
         sig['name'] = funcobj.__name__
-        if len(axioms) > 0:
-            sig['axioms'] = frozenset(axioms)
+        if len(attrs) > 0:
+            sig['attrs'] = frozenset(attrs)
         else:
-            sig['axioms'] = frozenset()
+            sig['attrs'] = frozenset()
 
         params = signature(funcobj).parameters
         if 'args' in params or 'kwargs' in params:

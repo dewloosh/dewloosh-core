@@ -38,21 +38,3 @@ class Infix:
 
     def __call__(self, value1, value2):
         return self.function(value1, value2)
-
-
-if __name__ == '__main__':
-
-    x = Infix(lambda x, y: x * y)
-    print(2 | x | 4)
-
-    x = Infix(lambda x, y: x + y)
-    print(2 << x >> 4)
-
-    # join = Infix(lambda x,y: x+y)
-    # print(2 |join| 4)
-
-    # def curry(f,x):
-    #     def curried_function(*args, **kw):
-    #         return f(*((x,)+args),**kw)
-    #     return curried_function
-    # curry = Infix(curry)

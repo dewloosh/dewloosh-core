@@ -4,7 +4,6 @@ Multiple solutions on how to enforce an abstract class property
 on an object. Generic types like 'List[int]' are not allowed, 
 because the don't work well with the isinstance()-like methods.
 """
-from abc import ABC
 
 __all__ = ['abstract_class_property', 'setproperty']
 
@@ -22,8 +21,8 @@ def setproperty(**kwargs):
 
 
 """
-Implementation A : class annotations solution using an object descriptor and a 
-wrapper class with classic pythonic manipulations.
+Implementation A : class annotations solution using an object descriptor 
+and a wrapper class with classic pythonic manipulations.
 """
 
 
@@ -141,68 +140,3 @@ def abstract_class_property_B(**kwargs):
         return res
 
     return abstractor
-
-
-if __name__ == '__main__':
-
-    @abstract_class_property_A(**{'customproperty1': int, 'customproperty2': float})
-    class BaseClassA(ABC):
-
-        prop1: int
-        prop2: list
-
-        def __init__(self):
-            self.prop2 = [3, 4]
-            super().__init__()
-            return
-
-    @setproperty(customproperty1=5)
-    @abstract_class_property(customproperty3=bool)
-    class ChildClassA(BaseClassA):
-
-        prop1 = 5
-        prop3: float
-
-        def __init__(self):
-            self.customproperty2 = 5.0
-            self.customproperty3 = True
-            self.prop3 = 1.0
-            super().__init__()
-            return
-
-    @abstract_class_property_B(**{'customproperty1': int, 'customproperty2': float})
-    class BaseClassB(ABC):
-
-        prop1: int
-        prop2: list
-
-        def __init__(self):
-            self.prop2 = [3, 4]
-            super().__init__()
-            return
-
-    @setproperty(customproperty1=5)
-    class ChildClassB(BaseClassB):
-
-        prop1 = 5
-        prop3: float
-
-        def __init__(self):
-            self.customproperty2 = 5.0
-            self.prop3 = 1.0
-            super().__init__()
-            return
-
-    """
-    Commenting out the declaration prop1 generates
-    an AttributeError. Note the difference of the 
-    different implementations in the description of the error.
-    """
-
-    cA = ChildClassA()
-    cB = ChildClassB()
-    print('ChildClassA is instance of BaseClassA : {}'.format(
-        isinstance(cA, BaseClassA)))
-    print('ChildClassB is instance of BaseClassB : {}'.format(
-        isinstance(cB, BaseClassB)))
-    pass

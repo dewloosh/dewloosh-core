@@ -2,7 +2,7 @@
 import unittest
 from abc import abstractmethod
 
-from dewloosh.core.abc.meta import ABC_Safe, ABC_Weak, ABC_Strong
+from dewloosh.core.meta import ABC_Safe, ABC_Weak, ABC_Strong
 
 
 class TestMeta(unittest.TestCase):

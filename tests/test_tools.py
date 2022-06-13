@@ -3,10 +3,12 @@ import unittest
 
 import math
 
-from dewloosh.core.tools.tools import float_to_str_sig, issequence, alphabet, \
-    ordrange, latinrange, urange, greekrange, arabicrange, suppress, timeit
+from dewloosh.core.tools.tools import float_to_str_sig, issequence, \
+    suppress, timeit
+from dewloosh.core.tools.alphabet import alphabet, ordrange, latinrange, \
+    urange, greekrange, arabicrange
 from dewloosh.core.tools.kwargtools import isinkwargs, allinkwargs, anyinkwargs, \
-    getfromkwargs, popfromdict, getallfromkwargs, getasany, countkwargs
+    getfromkwargs, popfromkwargs, getallfromkwargs, getasany, countkwargs
 
 
 class TestTools(unittest.TestCase):
@@ -44,8 +46,8 @@ class TestTools(unittest.TestCase):
         assert nE == 2
         assert nG == 1
         assert nNU == 1
-        popfromdict(['E1'], d)
-        assert isinstance(popfromdict(['E2'], d, astype=float)[0], float)
+        popfromkwargs(['E1'], d)
+        assert isinstance(popfromkwargs(['E2'], d, astype=float)[0], float)
         assert 'E1' not in d
         
     def test_alphabet(self):

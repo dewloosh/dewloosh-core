@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
-from abc import ABCMeta, abstractmethod
+from abc import ABCMeta
 
 
-__all__ = ["ABCMeta_Weak", "ABCMeta_Strong", "ABCMeta_Safe", "ABC_Strong",
-           "ABC_Weak", "ABC_Safe"]
+__all__ = ["ABCMeta_Weak", "ABCMeta_Strong", "ABCMeta_Safe"]
 
 
 def _is_callable(n, v): return callable(v) and ('__' not in n)
@@ -69,14 +68,6 @@ class ABCMeta_Weak(ABCMeta):
         return base_abc_methods
 
 
-class ABC_Weak(metaclass=ABCMeta_Weak):
-    """
-    Helper class that provides a standard way to create an ABC using
-    inheritance.
-    """
-    __slots__ = ()
-
-
 class ABCMeta_Strong(ABCMeta_Weak):
     """
     Strong Python metaclass. It follows strong abstraction in the meaning, that
@@ -110,13 +101,6 @@ class ABCMeta_Strong(ABCMeta_Weak):
         return cls
 
 
-class ABC_Strong(metaclass=ABCMeta_Strong):
-    """Helper class that provides a standard way to create an ABC using
-    inheritance.
-    """
-    __slots__ = ()
-
-
 class ABCMeta_Safe(ABCMeta_Weak):
     """
     Python metaclass for safe inheritance. Throws a TypeError
@@ -142,12 +126,3 @@ class ABCMeta_Safe(ABCMeta_Weak):
                         base_class=base.__name__)
                     raise TypeError(err_str)
         return cls
-
-
-class ABC_Safe(metaclass=ABCMeta_Safe):
-    """
-    Helper class that provides a standard way to create an ABC using
-    inheritance.
-    """
-    __slots__ = ()
-

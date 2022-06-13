@@ -1,36 +1,75 @@
 # -*- coding: utf-8 -*-
+# http://stackoverflow.com/a/6190500/562769
 from typing import Hashable, Union
+from collections.abc import Iterable
+import six
 
-from ..tools import issequence
-from .defaultdict import OrderedDictCollection, parsedicts
+from .tools.dtk import dictparser, parseitems, parseaddress, parsedicts
 
 
-__all__ = ['Library']
+__all__ = ['DeepDict']
 
 
 NoneType = type(None)
 
 
-class Library(OrderedDictCollection):
+def issequence(arg) -> bool:
     """
-    An ordered and nested dictionary class. It can be a drop-in replacement for
-    the bulit-in dictionary type, but it's more capable as it handles
-    nested dictionaries. See the documentation for examples.
+    Returns `True` if `arg` is any kind of iterable, but not a string,
+    returns `False` otherwise.
+    
+    Examples
+    --------
+    The formatter to use to print a floating point number with 4 digits:
+    
+    >>> from dewloosh.core.tools import issequence
+    >>> issequence([1, 2])
+    True
+    
+    To print the actual value as a string:
+    
+    >>> issequence('lorem ipsum')
+    False    
     """
+    return (
+        isinstance(arg, Iterable)
+        and not isinstance(arg, six.string_types)
+    )  
 
+
+class DeepDict(dict):
+    """
+    An nested dictionary class with a self-replicating default factory. 
+    It can be a drop-in replacement for the bulit-in dictionary type, 
+    but it's more capable as it handles nested layouts.
+    
+    Examples
+    --------
+    Basic usage:
+    
+    >>> from nddict import DeepDict
+    >>> d = {'a' : {'aa' : {'aaa' : 0}}, 'b' : 1, 'c' : {'cc' : 2}}
+    >>> dd = DeepDict(d)
+    >>> list(dd.values(deep=True))
+    [0, 1, 2]
+    
+    See the docs for more use cases!
+        
+    """
+    
     def __init__(self, *args, parent=None, root=None, locked=None, **kwargs):
         """
-        Returns a `Library` instance.
+        Returns a `DeepDict` instance.
 
         Parameters
         ----------
         *args : tuple, Optional
             Extra positional arguments are forwarded to the `dict` class.
 
-        parent : `Library`, Optional
-            Parent `Library` instance. Default is `None`.
+        parent : `DeepDict`, Optional
+            Parent `DeepDict` instance. Default is `None`.
 
-        root : `Library`, Optional
+        root : `DeepDict`, Optional
             The top-level object. It is automatically set when creating nested
             layouts, but may be explicitly provided. Default is `None`. 
 
@@ -40,7 +79,7 @@ class Library(OrderedDictCollection):
             A `None` value means that in terms of locking, the state of the object 
             is inherited from its parent. Default is `None`.
 
-        **kargs : tuple, Optional
+        **kwargs : tuple, Optional
             Extra keyword arguments are forwarded to the `dict` class.
 
         """
@@ -49,7 +88,7 @@ class Library(OrderedDictCollection):
         self._root = root
         self._locked = locked
         self._key = None
-
+        
     @property
     def key(self) -> Union[Hashable, NoneType]:
         """
@@ -57,7 +96,7 @@ class Library(OrderedDictCollection):
         object is the root.
         """
         return self._key
-
+           
     @property
     def locked(self) -> bool:
         """
@@ -76,7 +115,7 @@ class Library(OrderedDictCollection):
     @property
     def depth(self) -> int:
         """
-        Retuns the depth of the actual instance in a layout, starting from 0.
+        Retuns the depth of the actual instance in a layout, starting from 0..
         """
         if self.parent is None:
             return 0
@@ -85,7 +124,7 @@ class Library(OrderedDictCollection):
 
     def lock(self):
         """
-        Locks the layout of the dictionary. If a `Library` is locked,
+        Locks the layout of the dictionary. If a `DeepDict` is locked,
         missing keys are handled the same way as they would've been handled
         if it was a ´dict´.        
 
@@ -95,14 +134,14 @@ class Library(OrderedDictCollection):
 
     def unlock(self):
         """
-        Releases the layout of the dictionary. If a `Library` is not locked,
+        Releases the layout of the dictionary. If a `DeepDict` is not locked,
         a missing key creates a new level in the layout.
 
         Equivalent to ``self.locked = False``.
         """
         self._locked = False
 
-    def root(self) -> 'Library':
+    def root(self):
         """
         Returns the top-level object in a nested layout.
         """
@@ -123,7 +162,7 @@ class Library(OrderedDictCollection):
     def containers(self, *args, inclusive=False, deep=True, dtype=None, **kwargs):
         """
         Returns all the containers in a nested layout. A dictionary in a nested layout
-        is called a container, Only if it contains other containers (it is a parent). 
+        is called a container, only if it contains other containers (it is a parent). 
 
         Parameters
         ----------
@@ -150,8 +189,8 @@ class Library(OrderedDictCollection):
         --------
         A simple example:
 
-        >>> from dewloosh.core import Library
-        >>> data = Library()
+        >>> from nddict import DeepDict
+        >>> data = DeepDict()
         >>> data['a', 'b', 'c'] = 1
         >>> [c.key for c in data.containers()]
         ['a', 'b']
@@ -175,19 +214,16 @@ class Library(OrderedDictCollection):
         dtype = self.__class__ if dtype is None else dtype
         return parsedicts(self, inclusive=inclusive, dtype=dtype, deep=deep)
 
-    def __missing__(self, key):
-        if self.locked:
-            raise KeyError("Missing key : {}".format(key))
-        else:
-            return super().__missing__(key)
-
-    def __join_parent__(self, parent: 'Library', key: Hashable = None):
-        self.parent = parent
-        self._root = parent.root()
-        self._key = key
-
-    def __repr__(self):
-        return dict.__repr__(self)
+    def __getitem__(self, key):
+        try:
+            if issequence(key):
+                return parseaddress(self, key)
+            else:
+                return super().__getitem__(key)
+        except ValueError:
+            return self.__missing__(key)
+        except KeyError:
+            return self.__missing__(key)
 
     def __setitem__(self, key, value):
         try:
@@ -201,15 +237,75 @@ class Library(OrderedDictCollection):
                 else:
                     self[key[0]] = value
             else:
-                if isinstance(value, Library):
+                if isinstance(value, DeepDict):
                     value.__join_parent__(self, key)
                 return super().__setitem__(key, value)
         except AttributeError:
-            msg = "Target is of type '{}', which is not a container."
-            raise RuntimeError(msg.format(type(d)))
+            raise RuntimeError(
+                "Target is of type '{}', which is not a container.".format(type(d)))
         except KeyError:
             return self.__missing__(key)
 
-    def default_factory(self):
-        cls = type(self)
-        return cls(parent=self, root=self.root())
+    def __missing__(self, key):
+        if self.locked:
+            raise KeyError("Missing key : {}".format(key))
+        if issequence(key):
+            if key[0] not in self:
+                self[key[0]] = value = self.__class__()
+            else:
+                value = self[key[0]]
+            if len(key) > 1:
+                return value.__missing__(key[1:])
+            else:
+                return value
+        else:
+            self[key] = value = self.__class__()
+            return value
+        
+    def __reduce__(self):
+        return self.__class__, tuple(), None, None, self.items()
+    
+    def __repr__(self):
+        frmtstr = self.__class__.__name__ + '(%s)'
+        return frmtstr % (dict.__repr__(self))
+       
+    def __join_parent__(self, parent, key: Hashable = None):
+        self.parent = parent
+        self._root = parent.root()
+        self._key = key
+
+    def items(self, *args, deep=False, return_address=False, **kwargs):
+        if deep:
+            if return_address:
+                for addr, v in dictparser(self):
+                    yield addr, v
+            else:
+                for k, v in parseitems(self):
+                    yield k, v
+        else:
+            for k, v in super().items():
+                yield k, v
+
+    def values(self, *args, deep=False, return_address=False, **kwargs):
+        if deep:
+            if return_address:
+                for addr, v in dictparser(self):
+                    yield addr, v
+            else:
+                for _, v in parseitems(self):
+                    yield v
+        else:
+            for v in super().values():
+                yield v
+
+    def keys(self, *args, deep=False, return_address=False, **kwargs):
+        if deep:
+            if return_address:
+                for addr, _ in dictparser(self):
+                    yield addr
+            else:
+                for k, _ in parseitems(self):
+                    yield k
+        else:
+            for k in super().keys():
+                yield k

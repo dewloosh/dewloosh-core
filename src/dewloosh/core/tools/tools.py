@@ -1,9 +1,9 @@
 # -*- coding: utf-8 -*-
 import time
 import sys
-from collections.abc import Iterable
-import six
 from typing import Callable
+from ..typing import issequence
+
 
 __all__ = ['float_to_str_sig', 'floatformatter', 'issequence']
 
@@ -25,8 +25,8 @@ def floatformatter(*args, sig: int=6, **kwargs) -> str:
     
     Examples
     --------    
-    >>> from dewloosh.core import Library
-    >>> data = Library()
+    >>> from dewloosh.core import DeepDict
+    >>> data = DeepDict()
     >>> data['a']['b']['c']['e'] = 1
     >>> data['a']['b']['d'] = 2
     >>> data.containers()
@@ -110,77 +110,3 @@ def suppress(fnc: Callable) -> Callable:
         sys.stdout = original_stdout
         return res
     return inner
-
-
-def alphabet(abctype: str = 'latin', **kwargs) -> Iterable:
-    if abctype in ('ord', 'o'):
-        start = kwargs.pop('start', 0)
-    elif abctype in ('latin', 'l'):
-        start = ord(kwargs.pop('start', 'a'))
-    elif abctype == 'u':
-        start = ord(kwargs.pop('start', '\u0000'))
-    elif abctype in ('greek', 'g'):
-        start = ord(kwargs.pop('start', '\u03b1'))
-    while True:
-        yield chr(start)
-        start += 1
-
-
-def ordrange(N: int = 1, **kwargs) -> Iterable:
-    start = kwargs.pop('start', 0)
-    if isinstance(start, str):
-        start = ord(start)
-    stop = kwargs.pop('stop', None)
-    if stop is None or stop == start:
-        stop = start + N
-    return [chr(c) for c in range(start, stop)]
-
-
-def latinrange(N: int = 1, **kwargs) -> Iterable:
-    start = kwargs.pop('start', 97)
-    stop = kwargs.pop('stop', None)
-    return ordrange(N, start=start, stop=stop)
-
-
-def urange(N: int = 1, **kwargs) -> Iterable:
-    start = kwargs.pop('start', '\u0000')
-    stop = kwargs.pop('stop', None)
-    if stop is None:
-        stop = start
-    return ordrange(N, start=ord(start), stop=ord(stop))
-
-
-def greekrange(N: int = 1) -> Iterable:
-    return urange(N, start='\u03b1')
-
-
-def arabicrange(N: int = 1, **kwargs) -> Iterable:
-    start = kwargs.pop('start', 0)
-    stop = kwargs.pop('stop', None)
-    if stop is None or stop == start:
-        stop = start + N
-    return [str(c) for c in range(start, stop)]
-
-
-def issequence(arg) -> bool:
-    """
-    Returns `True` if `arg` is any kind of iterable, but not a string,
-    returns `False` otherwise.
-    
-    Examples
-    --------
-    The formatter to use to print a floating point number with 4 digits:
-    
-    >>> from dewloosh.core.tools import issequence
-    >>> issequence([1, 2])
-    True
-    
-    To print the actual value as a string:
-    
-    >>> issequence('lorem ipsum')
-    False    
-    """
-    return (
-        isinstance(arg, Iterable)
-        and not isinstance(arg, six.string_types)
-    )  

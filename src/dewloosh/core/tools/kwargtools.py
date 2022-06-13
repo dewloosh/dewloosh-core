@@ -32,7 +32,7 @@ def getfromkwargs(keys, default=None, astype=None, **kwargs):
         return [astype(p) for p in res]
 
 
-def popfromdict(keys, d: dict = None, *args, default=None, astype=None,
+def popfromkwargs(keys, d: dict = None, *args, default=None, astype=None,
                 **kwargs):
     res = [d.pop(k, default) for k in keys]
     if astype is None:
@@ -66,20 +66,6 @@ def getasany(keys, default=None, **kwargs):
     except Exception:
         return None
     
-
-"""def find_as_any(keys, default=None, **kwargs):
-    condition = [key in kwargs for key in keys]
-    if not any(condition) == True:
-        return default
-    return kwargs[keys[condition.index(True)]]
-
-
-def pop_as_any(keys, default=None, **kwargs):
-    condition = [key in kwargs for key in keys]
-    if not any(condition) == True:
-        return default
-    return kwargs.pop(keys[condition.index(True)])"""
-
 
 def countkwargs(fnc: Callable, **kwargs):
     assert callable(fnc)

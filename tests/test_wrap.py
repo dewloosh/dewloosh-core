@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 import unittest
 
-from dewloosh.core.abc.wrap import Wrapper, customwrapper, wrap, wrapper
+from dewloosh.core.wrap import Wrapper, customwrapper, wrap, wrapper
 
 
 class TestWrap(unittest.TestCase):
