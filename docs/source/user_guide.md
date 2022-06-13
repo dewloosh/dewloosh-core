@@ -1,4 +1,4 @@
-# **User Guide**
+# **A Quick Guide**
 
 ## **Installation**
 This is optional, but we suggest you to create a dedicated virtual enviroment at all times to avoid conflicts with your other projects. Create a folder, open a command shell in that folder and use the following command
@@ -19,7 +19,7 @@ Once the enviroment is created, activate it via typing
 >>> pip install dewloosh.core
 ```
 
-## **A Quick Guide**
+## **Main Features**
 
 ### Nested Dictionaries
 
@@ -92,9 +92,7 @@ It is important, that the call `obj.values(deep=True)` still returns a generator
 <generator object OrderedDefaultDict.values at 0x0000028F209D54A0>    
 ```
 
-### Wrapping and Metaprogramming
-
-#### Wrapping
+### Wrapping
 
 Wrapping may not be the most elegant solutions to inherit properties of a different class, but there are certain situations when it might save your life. One such a scenario is when you want to write an interface to a DeepDict that gets dinamically generated runtime, meaning, that the classes are simply not present at the time of writing your own code. This is when a wrapper comes handy. To wrap a dictionary, do the following:
 
@@ -127,7 +125,7 @@ Id we tried to wrap a dictionary now, the implementation would alter the bahavio
 dict_values([{'b': {'c': {'e': 3}, 'd': 2}}])
 ```
 
-#### Abstract Base Classes
+### Abstract Base Classes
 
 The module `dewloosh.core.abc` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party library, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
 
