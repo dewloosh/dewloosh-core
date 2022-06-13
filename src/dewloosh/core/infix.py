@@ -1,14 +1,11 @@
 # -*- coding: utf-8 -*-
-from collections.abc import Callable
+from typing import Callable
 
 
 class Infix:
     """
-    Implements a custom Infix operator.
-
-    Usage
-    -----
-        x |op| y    or    x <<op>> y
+    Implements a custom Infix operator using  the 
+    operators '<<', '>>' and '|'.
 
     Example
     -------

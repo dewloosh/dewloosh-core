@@ -12,15 +12,16 @@
 #
 import os
 import sys
-#sys.path.insert(0, os.path.abspath('.'))
-sys.path.insert(0, os.path.abspath('../../src/'))
-
+sys.path.insert(0, os.path.abspath('.'))
+sys.path.insert(0, os.path.abspath('..'))
+sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('../../src'))
 
 # -- Project information -----------------------------------------------------
 
 project = 'dewloosh.core'
-copyright = '2022, dewloosh'
-author = 'dewloosh'
+copyright = '2022, Bence Balogh'
+author = 'Bence Balogh'
 
 # The full version, including alpha/beta/rc tags
 #release = '2022'
@@ -71,6 +72,8 @@ source_suffix = ['.rst', '.md']
 # This pattern also affects html_static_path and html_extra_path.
 exclude_patterns = []
 
+# The master toctree document.
+master_doc = 'index'
 
 # -- Options for HTML output -------------------------------------------------
 
@@ -78,10 +81,9 @@ exclude_patterns = []
 # a list of builtin themes.
 #
 html_theme = 'furo'
+html_title = "dewloosh.core"
 
 # Add any paths that contain custom static files (such as style sheets) here,
 # relative to this directory. They are copied after the builtin static files,
 # so a file named "default.css" will overwrite the builtin "default.css".
-html_static_path = ['_static']
-
-html_title = "dewloosh.core"
+html_static_path = []

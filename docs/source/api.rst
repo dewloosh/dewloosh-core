@@ -2,5 +2,6 @@ dewloosh.core API reference
 ===========================
 
 .. toctree::
-    api_library
+    api_deepdict
     api_tools
+    api_infix
