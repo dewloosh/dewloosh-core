@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import codecs
-import os.path
+import os.path, sys
 from setuptools import find_namespace_packages, setup
+from setuptools.command.install import install
 
 
 def read(rel_path):
@@ -44,6 +45,18 @@ _url = 'https://github.com/dewloosh/dewloosh-{}'.format(_module)
 _download_url = _url + '/archive/refs/tags/{}.zip'.format(_version)
 
 
+class VerifyVersionCommand(install):
+    """Custom command to verify that the git tag matches our version"""
+    description = 'verify that the git tag matches our version'
+
+    def run(self):
+        tag = os.getenv('CIRCLE_TAG')
+        if tag != _version:
+            info = "Git tag: {0} does not match the version of this app: {1}".format(
+                tag, _version
+            )
+            sys.exit(info)
+
 setup(
 	name="dewloosh.{}".format(_module),
     version=_version,                        
@@ -57,11 +70,18 @@ setup(
 	packages=find_namespace_packages(where='src', include=['dewloosh.*']),
 	classifiers=[
         'Development Status :: 5 - Production/Stable',     
-        'License :: OSI Approved :: MIT License',   
-        'Programming Language :: Python :: 3',
+        'License :: OSI Approved :: MIT License',
+        "Programming Language :: Python :: 3.6",
+        "Programming Language :: Python :: 3.7",
+        "Programming Language :: Python :: 3.8",
+        "Programming Language :: Python :: 3.9",   
+        'Programming Language :: Python :: 3 :: Only',
 		'Operating System :: OS Independent'
     ],                                      
-    python_requires='>=3.6',                             
+    python_requires='>=3.6',
+    cmdclass={
+        'verify': VerifyVersionCommand,
+    },                             
     package_dir={'':'src'},     
     install_requires=required,
 	zip_safe=False,

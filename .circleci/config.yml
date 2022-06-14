@@ -8,6 +8,25 @@ orbs:
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@2.0.3
 
+workflows:
+  main:  # This is the name of the workflow, feel free to change it to better match your workflow.
+    # Inside the workflow, you define the jobs you want to run.
+    # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
+    jobs:
+      - tox-test
+      - test310:
+          requires:
+            - tox-test
+      - deploy:
+          requires:
+            - tox-test
+            - test310
+          filters:
+            tags:
+              only: /[0-9]+(\.[0-9]+)*/
+            branches:
+              ignore: /.*/
+
 jobs:
   test310:  # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a docker executors: https://circleci.com/docs/2.0/executor-types/
@@ -63,10 +82,41 @@ jobs:
           name: Test
           command: tox
 
-workflows:
-  main:  # This is the name of the workflow, feel free to change it to better match your workflow.
-    # Inside the workflow, you define the jobs you want to run.
-    # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
-    jobs:
-      - tox-test
-      - test310
+  deploy:
+    docker:
+      - image: cimg/python:3.10
+    steps:
+      - checkout
+      - restore_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+      - run:
+          name: install python dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make dev
+      - save_cache:
+          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
+          paths:
+            - "venv"
+      - run:
+          name: verify git tag vs. version
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            python setup.py verify
+      - run:
+          name: init .pypirc
+          command: |
+            echo -e "[pypi]" >> ~/.pypirc
+            echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
+            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
+      - run:
+          name: create packages
+          command: |
+            make package
+      - run:
+          name: upload to pypi
+          command: |
+            . venv/bin/activate
+            twine upload dist/*
