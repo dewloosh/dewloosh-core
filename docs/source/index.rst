@@ -1,5 +1,12 @@
-dewloosh.core
-=============
+================================================================
+DewLoosh.Core - Common Developer Utilities for DewLoosh Projects
+================================================================
+
+`DewLoosh` is a rapid prototyping platform focused on numerical calculations 
+mainly corcerned with simulations of natural phenomena. It provides a set of common 
+functionalities and interfaces with a number of state-of-the-art open source 
+packages to combine their power seamlessly under a single developing 
+environment.
 
 The main purpose of `dewloosh.core` is to provide batteries to other dewloosh
 projects.
