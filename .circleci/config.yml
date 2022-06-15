@@ -75,7 +75,9 @@ jobs:
           command: |
             python3 -m venv venv
             . venv/bin/activate
-            make dev
+            pip install wheel twine
+            pip install -e .
+            python setup.py sdist bdist_wheel
       - save_cache:
           key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
           paths:
@@ -100,7 +102,7 @@ jobs:
           name: upload to pypi
           command: |
             . venv/bin/activate
-            twine upload dist/*
+            twine upload --skip-existing dist/*
 
 workflows:
   version: 2
@@ -132,3 +134,5 @@ workflows:
           filters:
             tags:
               only: /^v.*/
+            branches:
+              ignore: /.*/
