@@ -11,7 +11,7 @@
 </a>
 
 
-This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a bare metal setup.
+This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a minimal setup.
 
 The most important features:
 
@@ -31,8 +31,7 @@ There are no known issues.
 
 #### Dictionaries of dictionaries of diactionaries of ...
 
-In every case where you'd want to use a `dict`, you can use a `Deepdict` as a drop-in replacement, but on top of what a simple dictionary provides, a `Deepdict` is more capable, as it provides a machinery to handle nested layouts. It is basically an ordered `defaultdict` with a self replicating default factory. This feature is exploited in many classes in other `dewloosh` packages, the most prominent ones being `dewloosh.geom.PolyData` and `dewloosh.solid.fem.FemMesh`.
-
+In every case where you'd want to use a `dict`, you can use a `Deepdict` as a drop-in replacement, but on top of what a simple dictionary provides, a `Deepdict` is more capable, as it provides a machinery to handle nested layouts. It is basically an ordered `defaultdict` with a self replicating default factory. 
 
 ```python
 >>> from dewloosh.core import Deepdict
