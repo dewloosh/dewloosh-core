@@ -11,23 +11,15 @@
 </a>
 
 
-> **Warning**
-> This package is under active development and in an **alpha stage**. Come back later, or star the repo to make sure you don’t miss the first stable release!
-
 This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a bare metal setup.
 
+The most important features:
 
-The most important tools are:
+* Various dictionary classes that enhance the core behaviour of the built-in `dict` type. The top of the cake is the `DeepDict` class, which offers a different behaviour for nested dictionaries by applying a self replicating defalt factory.
 
-* Classes `DictCollection` and `OrderedDictCollection` providing facilities to deal with nested dictionaries, allowing us to create and manipulate hierarchical data objects. 
+* A set of tools for metaprogramming. The use cases include declaring custom abstract class properties, using metaclasses to avoid unwanted code conflicts, assuring the implementation of abstract methods at design time, etc.
 
-* A `Deepdict` class, that takes `OrderedDictCollection` to the next level.
-
-* A set of abstract base classes for metaprogramming.
-
-* Various decorators, wrappers and other handy developer tools.
-
-* Some other tools for educational refrencing.
+* Decorators, wrappers and other handy developer tools.
 
 ## **Documentation and Issues**
 
@@ -143,7 +135,7 @@ dict_values([{'b': {'c': {'e': 3}, 'd': 2}}])
 
 #### Abstract Classes and Metaprogramming
 
-The submodule `dewloosh.core.abc.meta` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party Deepdict, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
+The submodule `dewloosh.core.abc` provides simple classes to alleviate some of the unwanted consequences of the dynamically typed nature of Python. One of such a scenarios is when we subclass another class from a third-party Deepdict, because we want to inherit the functionality therein. But the stuff is complicated, and we probably woundn't want to go through all of it. Nevertheless, we want to make sure, that we don't brake the inner flow of the object at runtime, by overriding some essential methods, shadowing the original behaviour. Not like it wouldn't show up runtime sooner or later, but this leaves the door opened for bad code. Luckily, the problem can be solved fairly easily with some metaprogramming, and the meta submodule provides an abstract class `ABC_Safe` that can be used as a base class further down the line.
 
 Running the following code throws an error at design time, because `foo` is already implemented in the parent class:
 
@@ -179,7 +171,7 @@ Along the same thoughts, sometimes we want to ensure the existence of some class
 properties when building complex objects with multiple base classes. This can be done using a special decorator:
 
 ```python
->>> from dewloosh.core.acpimport abstract_class_property
+>>> from dewloosh.core.acp import abstract_class_property
 >>> from abc import ABC
 >>> 
 >>> @abstract_class_property(prop1=int, prop2=float})
