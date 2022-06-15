@@ -7,6 +7,7 @@ orbs:
   # so you dont have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@2.0.3
+  capture-tag: rvla/capture-tag@0.0.2
 
 jobs:
   test310:  # This is the name of the job, feel free to change it to better match what you're trying to do!
@@ -68,6 +69,8 @@ jobs:
       - image: cimg/python:3.10
     steps:
       - checkout
+      - capture-tag/capture-tag:
+          working_directory: ~/project
       - restore_cache:
           key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
       - run:
