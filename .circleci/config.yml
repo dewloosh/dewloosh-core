@@ -115,12 +115,12 @@ workflows:
     jobs:
       - test310
       
-  deploy:
-    jobs:
-      - test310
-      - deploy-pypi:
-          requires:
-            - test310
-          filters:
-            tags:
-              only: /^v.*/
+  #deploy:
+  #  jobs:
+  #    - test310
+      #- deploy-pypi:
+      #    requires:
+      #      - test310
+      #    filters:
+      #      tags:
+      #        only: /^v.*/
