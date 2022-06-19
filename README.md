@@ -222,7 +222,7 @@ To run all tests, open up a console in the root directory of the project and typ
 
 ## **Dependencies**
 
-The package has no dependencies.
+The only dependency is `six`, to provide basic continuity between major Python versions 2 and 3.
 
 ## **License**
 
