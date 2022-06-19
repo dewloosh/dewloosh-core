@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 # http://stackoverflow.com/a/6190500/562769
 from typing import Hashable, Union
-from collections.abc import Iterable
+from collections import Iterable
 import six
 
 from .tools.dtk import dictparser, parseitems, parseaddress, parsedicts

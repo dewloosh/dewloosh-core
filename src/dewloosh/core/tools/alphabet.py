@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from collections.abc import Iterable
+from collections import Iterable
 
 
 def alphabet(abctype: str = 'latin', **kwargs) -> Iterable:

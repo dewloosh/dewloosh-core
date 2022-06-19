@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from typing import Hashable
-from collections.abc import Iterable
+from collections import Iterable
 import six
 
 
