@@ -1,15 +1,10 @@
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dewloosh/dewloosh-core/main?labpath=examples%2Fbasic_examples.ipynb?urlpath=lab)
+[![CircleCI](https://circleci.com/gh/dewloosh/dewloosh-core.svg?style=shield)](https://circleci.com/gh/dewloosh/dewloosh-core) 
+[![Documentation Status](https://readthedocs.org/projects/dewloosh-core/badge/?version=latest)](https://nddict.readthedocs.io/en/latest/?badge=latest) 
+[![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![PyPI](https://badge.fury.io/py/dewloosh.core.svg)](https://pypi.org/project/dewloosh.core) 
+
 # **dewloosh.core**
-
-<a href='https://dewloosh-core.readthedocs.io/en/latest/?badge=latest'>
-    <img src='https://readthedocs.org/projects/dewloosh-core/badge/?version=latest' alt='Documentation Status' />
-</a>
-<a href="https://pypi.org/project/dewloosh.core"/>
-            <img src="https://badge.fury.io/py/dewloosh.core.svg"/>
-</a>
-<a href="https://opensource.org/licenses/MIT"/>
-            <img src="https://img.shields.io/badge/License-MIT-yellow.svg"/>
-</a>
-
 
 This package contains common developer utilities to support other `dewloosh` solutions. Everything is pure Python, the package requires no extra dependencies and should run on a minimal setup.
 
