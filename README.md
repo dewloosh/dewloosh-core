@@ -1,4 +1,4 @@
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dewloosh/dewloosh-core/main?labpath=examples%2Fbasic_examples.ipynb?urlpath=lab)
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/dewloosh/dewloosh-core/main?labpath=examples%2Fbasics.ipynb?urlpath=lab)
 [![CircleCI](https://circleci.com/gh/dewloosh/dewloosh-core.svg?style=shield)](https://circleci.com/gh/dewloosh/dewloosh-core) 
 [![Documentation Status](https://readthedocs.org/projects/dewloosh-core/badge/?version=latest)](https://nddict.readthedocs.io/en/latest/?badge=latest) 
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
@@ -16,13 +16,30 @@ The most important features:
 
 * Decorators, wrappers and other handy developer tools.
 
-## **Documentation and Issues**
+## **Documentation**
 
 Click [here](https://dewloosh-core.readthedocs.io/en/latest/) to read the documentation.
 
-There are no known issues.
+## **Installation**
+This is optional, but we suggest you to create a dedicated virtual enviroment at all times to avoid conflicts with your other projects. Create a folder, open a command shell in that folder and use the following command
 
-## **A Quick Guide**
+```console
+>>> python -m venv venv_name
+```
+
+Once the enviroment is created, activate it via typing
+
+```console
+>>> .\venv_name\Scripts\activate
+```
+
+`dewloosh.core` can be installed (either in a virtual enviroment or globally) from PyPI using `pip` on Python >= 3.6:
+
+```console
+>>> pip install dewloosh.core
+```
+
+## **Crash Course**
 
 #### Dictionaries of dictionaries of diactionaries of ...
 
@@ -193,25 +210,6 @@ Infix operators allow for a fancy way of defining binary operations using the op
 >>> add = Infix(lambda x, y: x + y)
 >>> 2 << add >> 4
 6
-```
-
-## **Installation**
-This is optional, but we suggest you to create a dedicated virtual enviroment at all times to avoid conflicts with your other projects. Create a folder, open a command shell in that folder and use the following command
-
-```console
->>> python -m venv venv_name
-```
-
-Once the enviroment is created, activate it via typing
-
-```console
->>> .\venv_name\Scripts\activate
-```
-
-`dewloosh.core` can be installed (either in a virtual enviroment or globally) from PyPI using `pip` on Python >= 3.6:
-
-```console
->>> pip install dewloosh.core
 ```
 
 ## **Testing**
