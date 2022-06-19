@@ -1,5 +1,8 @@
 # -*- coding: utf-8 -*-
-from collections import Iterable
+try:
+    from collections.abc import Iterable
+except ImportError:
+    from collections import Iterable
 
 
 def alphabet(abctype: str = 'latin', **kwargs) -> Iterable:
