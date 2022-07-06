@@ -23,6 +23,7 @@ def dictparser(d: dict = None, address=None, *args, dtype=dict, **kwargs):
 
 
 def parseaddress(d: dict, a: list):
+    """Returns a value specified with an address."""
     if not isinstance(d, dict):
         raise ValueError
     if not a[0] in d:
@@ -62,3 +63,21 @@ def parsedicts(d: dict = None, *args, inclusive=True, dtype=dict,
                 for subvalue in \
                         parsedicts(value, inclusive=False, dtype=dtype):
                     yield subvalue
+                    
+                    
+def parsedicts_addr(d: dict = None, address=[], *args, inclusive=True,
+                    dtype=dict, deep=True, **kwargs):
+    if inclusive:
+        if isinstance(d, dtype):
+            yield address, d
+    for key, value in d.items():
+        if isinstance(value, dtype):
+            addr = copy(address)
+            addr.append(key)
+            yield addr, value
+            if deep:
+                for subaddr, subval in \
+                    parsedicts_addr(value, addr,
+                                    inclusive=False, dtype=dtype):
+                    yield subaddr, subval
+                    

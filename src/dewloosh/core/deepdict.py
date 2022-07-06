@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 # http://stackoverflow.com/a/6190500/562769
-from typing import Hashable, Union
+from typing import Hashable, Union, Tuple
 try:
     from collections.abc import Iterable
 except ImportError:
@@ -124,6 +124,16 @@ class DeepDict(dict):
             return 0
         else:
             return self.parent.depth + 1
+        
+    @property
+    def address(self) -> Tuple:
+        """Returns the address of an item."""
+        if self.is_root():
+            return []
+        else:
+            r = self.parent.address
+            r.append(self.key)
+            return r
 
     def lock(self):
         """
@@ -243,9 +253,6 @@ class DeepDict(dict):
                 if isinstance(value, DeepDict):
                     value.__join_parent__(self, key)
                 return super().__setitem__(key, value)
-        except AttributeError:
-            raise RuntimeError(
-                "Target is of type '{}', which is not a container.".format(type(d)))
         except KeyError:
             return self.__missing__(key)
 
