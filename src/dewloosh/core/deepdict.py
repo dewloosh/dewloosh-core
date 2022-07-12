@@ -248,11 +248,25 @@ class DeepDict(dict):
                 if len(key) > 1:
                     d.__setitem__(key[1:], value)
                 else:
-                    self[key[0]] = value
+                    d = self[key[0]]
+                    if isinstance(d, DeepDict):
+                        d.__leave_parent__()
+                    if value is None:
+                        del self[key[0]]
+                    else:
+                        self[key[0]] = value
             else:
-                if isinstance(value, DeepDict):
-                    value.__join_parent__(self, key)
-                return super().__setitem__(key, value)
+                if key in self:
+                    d = self[key]
+                    if isinstance(d, DeepDict):
+                        d.__leave_parent__()
+                if value is None:
+                    if key in self:
+                        del self[key]
+                else:
+                    if isinstance(value, DeepDict):
+                        value.__join_parent__(self, key)
+                    return super().__setitem__(key, value)
         except KeyError:
             return self.__missing__(key)
 
@@ -279,6 +293,11 @@ class DeepDict(dict):
         frmtstr = self.__class__.__name__ + '(%s)'
         return frmtstr % (dict.__repr__(self))
        
+    def __leave_parent__(self):
+        self.parent = None
+        self._root = None
+        self._key = None
+            
     def __join_parent__(self, parent, key: Hashable = None):
         self.parent = parent
         self._root = parent.root()
