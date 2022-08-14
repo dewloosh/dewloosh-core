@@ -5,7 +5,7 @@ from typing import Callable
 from ..typing import issequence
 
 
-__all__ = ['float_to_str_sig', 'floatformatter', 'issequence']
+__all__ = ['float_to_str_sig', 'floatformatter', 'issequence', 'suppress']
 
 
 def floatformatter(*args, sig: int=6, **kwargs) -> str:
