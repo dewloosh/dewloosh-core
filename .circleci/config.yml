@@ -101,19 +101,19 @@ workflows:
     # Inside the workflow, you define the jobs you want to run.
     # For more details on extending your workflow, see the configuration docs: https://circleci.com/docs/2.0/configuration-reference/#workflows
     jobs:
-      - tox-test
+      #- tox-test
       - test310
 
-  nightly:
-    triggers:
-      - schedule:
-          cron: "0 0 * * *" # run once every day
-          filters:
-            branches:
-              only:
-                - main
-    jobs:
-      - test310
+  #nightly:
+  #  triggers:
+  #    - schedule:
+  #        cron: "0 0 * * *" # run once every day
+  #        filters:
+  #          branches:
+  #            only:
+  #              - main
+  #  jobs:
+  #    - test310
       
   #deploy:
   #  jobs:
