@@ -61,7 +61,7 @@ class VerifyVersionCommand(install):
 setup(
 	name="dewloosh.{}".format(_module),
     version=_version,                        
-    author="dewloosh",
+    author="Bence Balogh",
     author_email = 'dewloosh@gmail.com',                   
     description=_description,
     long_description=long_description,   
@@ -72,7 +72,6 @@ setup(
 	classifiers=[
         'Development Status :: 5 - Production/Stable',     
         'License :: OSI Approved :: MIT License',
-        "Programming Language :: Python :: 3.6",
         "Programming Language :: Python :: 3.7",
         "Programming Language :: Python :: 3.8",
         "Programming Language :: Python :: 3.9",
@@ -80,7 +79,7 @@ setup(
         'Programming Language :: Python :: 3 :: Only',
 		'Operating System :: OS Independent'
     ],                                      
-    python_requires='>=3.6, <3.11',   
+    python_requires='>=3.7, <3.11',   
     cmdclass={
         'verify': VerifyVersionCommand,
     },                             
