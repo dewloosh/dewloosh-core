@@ -1,0 +1,4 @@
+myst_parser
+furo
+numpy
+

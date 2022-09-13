@@ -1,2 +1,2 @@
-# **dewloosh.mpl**
+# **dewloosh.core**
 
