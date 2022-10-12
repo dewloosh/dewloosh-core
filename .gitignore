@@ -107,6 +107,7 @@ celerybeat.pid
 # Environments
 .env
 .venv
+.dlsh-core
 env/
 venv/
 ENV/
