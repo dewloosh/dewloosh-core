@@ -7,15 +7,15 @@ class Infix:
     Implements a custom Infix operator using  the 
     operators '<<', '>>' and '|'.
 
-    Example
-    -------
-        >>> x = Infix(lambda x, y: x * y)
-        >>> print(2 | x | 4)
-        8
+    Examples
+    --------
+    >>> x = Infix(lambda x, y: x * y)
+    >>> print(2 | x | 4)
+    8
 
-        >>> x = Infix(lambda x, y: x + y)
-        >>> print(2 << x >> 4)
-        6
+    >>> x = Infix(lambda x, y: x + y)
+    >>> print(2 << x >> 4)
+    6
     """
 
     def __init__(self, function: Callable):

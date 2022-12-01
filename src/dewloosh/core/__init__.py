@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 from .wrapping import Wrapper
 from .typing import ishashable, issequence
+from .cp import classproperty
+from .infix import Infix
+from .attr import attributor
 
 import os
 import appdirs
 import warnings
 from typing import Optional
 
-__version__ = "1.0.12"
+__version__ = "1.0.13"
 __description__ = "Common developer utilities and base classes to support other dewloosh packages."
 
 # catch annoying numpy/vtk future warning:

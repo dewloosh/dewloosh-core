@@ -35,3 +35,5 @@ if __name__ == '__main__':
     @axiom
     def foo(a, b):
         return 'an axiom'
+
+    print(foo.__isaxiom__)
