@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from .wrapping import Wrapper
 from .typing import ishashable, issequence
 from .cp import classproperty

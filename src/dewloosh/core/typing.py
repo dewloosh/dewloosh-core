@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 from typing import Hashable
 try:
     from collections.abc import Iterable
@@ -38,4 +37,13 @@ def ishashable(obj):
     """
     Returns `True` if `obj` is hashable.
     """
-    return isinstance(obj, Hashable) 
+    return isinstance(obj, Hashable)
+
+
+class classonlymethod(classmethod):
+    def __get__(self, instance, cls=None):
+        if instance is not None:
+            raise AttributeError(
+                "This method is available only on the class, not on instances."
+            )
+        return super().__get__(instance, cls)
