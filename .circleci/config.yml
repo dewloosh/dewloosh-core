@@ -7,6 +7,7 @@ orbs:
   # so you dont have to copy and paste it everywhere.
   # See the orb documentation here: https://circleci.com/developer/orbs/orb/circleci/python
   python: circleci/python@2.1.1
+  codecov: codecov/codecov@3
 
 jobs:
   build_test:
@@ -21,7 +22,7 @@ jobs:
           command: pip install pytest pytest-cov
       - run:
           name: Build wheel
-          command: |  # create whl and use pipenv to install dependencies
+          command: |
             pip install wheel twine
             python setup.py install
             python setup.py sdist bdist_wheel
@@ -37,7 +38,7 @@ jobs:
       - checkout  # checkout source code to working directory
       - run:
           name: Deploy to testpypi
-          command: |  # create whl and use pipenv to install dependencies
+          command: |
             pip install wheel twine
             python setup.py sdist bdist_wheel
             python -m twine upload --repository testpypi --skip-existing dist/*
@@ -49,7 +50,7 @@ jobs:
       - checkout  # checkout source code to working directory
       - run:
           name: Deploy to pypi
-          command: |  # create whl and use pipenv to install dependencies
+          command: |
             pip install wheel twine
             python setup.py sdist bdist_wheel
             python -m twine upload --skip-existing dist/*
@@ -80,11 +81,17 @@ jobs:
           pkg-manager: pip
           pip-dependency-file: dev-requirements.txt
       - run:
-          command: pip install -e .
+          command: python setup.py install
       - run:
           name: Run tests
           # This assumes pytest is installed via the install-package step above
-          command: python -m pytest
+          command: pytest --cov
+      - run:
+          name: Generate Artifact
+          command: pytest --cov-report html
+      #- codecov/upload
+      - store_artifacts:
+          path: ~/project/htmlcov
 
   tox-test:  # This is the name of the job, feel free to change it to better match what you're trying to do!
     # These next lines defines a docker executors: https://circleci.com/docs/2.0/executor-types/
@@ -107,37 +114,6 @@ jobs:
       - run:
           name: Test
           command: tox
-
-  deploy-pypi:
-    docker:
-      - image: cimg/python:3.10
-    steps:
-      - checkout
-      - restore_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
-      - run:
-          name: install python dependencies
-          command: |
-            python3 -m venv venv
-            . venv/bin/activate
-            pip install wheel twine
-            python setup.py install
-            python setup.py sdist bdist_wheel
-      - save_cache:
-          key: v1-dependency-cache-{{ checksum "setup.py" }}-{{ checksum "Makefile" }}
-          paths:
-            - "venv"
-      - run:
-          name: init .pypirc
-          command: |
-            echo -e "[pypi]" >> ~/.pypirc
-            echo -e "username = $PYPI_USERNAME" >> ~/.pypirc
-            echo -e "password = $PYPI_PASSWORD" >> ~/.pypirc
-      - run:
-          name: upload to pypi
-          command: |
-            . venv/bin/activate
-            twine upload --skip-existing dist/*
 
 workflows:
   version: 2
@@ -166,24 +142,3 @@ workflows:
             branches:
               only:
                 - main
-
-  #nightly:
-  #  triggers:
-  #    - schedule:
-  #        cron: "0 0 * * *" # run once every day
-  #        filters:
-  #          branches:
-  #            only:
-  #              - main
-  #  jobs:
-  #    - test310
-      
-  #deploy:
-  #  jobs:
-  #    - test310
-      #- deploy-pypi:
-      #    requires:
-      #      - test310
-      #    filters:
-      #      tags:
-      #        only: /^v.*/
