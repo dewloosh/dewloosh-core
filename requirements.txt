@@ -1,5 +1,5 @@
-setuptools
-wheel
+setuptools>=65.5.1 # pinned by Snyk to avoid a vulnerability
+wheel>=0.38.0 # pinned by Snyk to avoid a vulnerability
 appdirs
 matplotlib
 numpy>=1.21.0rc1 # not directly required, pinned by Snyk to avoid a vulnerability
