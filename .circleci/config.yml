@@ -129,6 +129,8 @@ workflows:
     jobs:
       - build_test
       - test_pypi_publish:
+          context:
+            - pypi deploy
           requires:
             - build_test
           filters:
@@ -136,6 +138,8 @@ workflows:
               only:
                 - nightly
       - pypi_publish:
+          context:
+            - pypi deploy
           requires:
             - build_test
           filters:
