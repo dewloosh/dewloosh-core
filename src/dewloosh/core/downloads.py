@@ -162,6 +162,5 @@ def download_stand():  # pragma: no cover
     >>> from dewloosh.core.downloads import download_stand
     >>> download_stand()
     ...
-    
     """
     return _download_file('stand.vtk')[0]
