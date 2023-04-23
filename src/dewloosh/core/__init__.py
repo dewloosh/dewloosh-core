@@ -9,7 +9,7 @@ import appdirs
 import warnings
 from typing import Optional
 
-__version__ = "1.0.19"
+__version__ = "1.0.20"
 __description__ = "Common developer utilities and base classes to support other dewloosh packages."
 
 # catch annoying numpy/vtk future warning:

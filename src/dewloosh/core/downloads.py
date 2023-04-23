@@ -164,3 +164,28 @@ def download_stand():  # pragma: no cover
     ...
     """
     return _download_file('stand.vtk')[0]
+
+
+def download_bunny(tetra:bool=False):  # pragma: no cover
+    """
+    Downloads a tetrahedral mesh of a bunny in vtk format.
+
+    Parameters
+    ----------
+    tetra: bool, Optional
+        If True, the returned mesh is a tetrahedral one, otherwise
+        it is a surface triangulation. Default is False.
+    
+    Returns
+    -------
+    str
+        A path to a file on your filesystem.
+
+    Example
+    --------
+    >>> from dewloosh.core.downloads import download_bunny
+    >>> download_bunny()
+    ...
+    """
+    filename = 'bunny_T3.vtk' if not tetra else 'bunny_TET4.vtk'
+    return _download_file(filename)[0]
