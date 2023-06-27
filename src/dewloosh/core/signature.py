@@ -13,74 +13,71 @@ class Signature(dict):
     type signatures. It helps to decide if an implementation satisfies
     some requirements imposed on a class.
     """
-    
-    __abckey__ = 'isabstractoperation'
+
+    __abckey__ = "isabstractoperation"
 
     def __init__(self, *args, **kwargs):
         super().__init__(**kwargs)
-        setattr(self, 'isabstract', 'abstract' in args)
+        setattr(self, "isabstract", "abstract" in args)
 
     @classmethod
     def from_function(cls, funcobj, *attrs, **kwargs):
-
         if getattr(funcobj, cls.__abckey__, False):
-            sig = Signature('abstract', **kwargs)
+            sig = Signature("abstract", **kwargs)
         else:
             sig = Signature(**kwargs)
 
-        sig['name'] = funcobj.__name__
+        sig["name"] = funcobj.__name__
         if len(attrs) > 0:
-            sig['attrs'] = frozenset(attrs)
+            sig["attrs"] = frozenset(attrs)
         else:
-            sig['attrs'] = frozenset()
+            sig["attrs"] = frozenset()
 
         params = signature(funcobj).parameters
-        if 'args' in params or 'kwargs' in params:
-            raise TypeError(
-                'Operation can only have a finite number of arguments!')
-        if 'self' in params or 'cls' in params:
-            sig['arity'] = len(params)-1
+        if "args" in params or "kwargs" in params:
+            raise TypeError("Operation can only have a finite number of arguments!")
+        if "self" in params or "cls" in params:
+            sig["arity"] = len(params) - 1
         else:
-            sig['arity'] = len(params)
+            sig["arity"] = len(params)
 
-        if sig['arity'] == 0:
-            sig['dtype'] = [Any]
+        if sig["arity"] == 0:
+            sig["dtype"] = [Any]
         else:
-            sig['dtype'] = []
+            sig["dtype"] = []
             for pname, param in params.items():
-                if pname not in ['self', 'cls']:
+                if pname not in ["self", "cls"]:
                     if param.annotation is not Parameter.empty:
-                        sig['dtype'].append(param.annotation)
+                        sig["dtype"].append(param.annotation)
                     else:
-                        sig['dtype'].append(Any)
+                        sig["dtype"].append(Any)
 
         annotations = funcobj.__annotations__
-        if 'return' in annotations:
-            sig['rtype'] = annotations['return']
+        if "return" in annotations:
+            sig["rtype"] = annotations["return"]
         else:
-            sig['rtype'] = Any
+            sig["rtype"] = Any
 
         return sig
 
     @classmethod
     def from_property(cls, funcobj, **kwargs):
-
         if funcobj.isabstractattribute:
-            sig = Signature('abstract', **kwargs)
+            sig = Signature("abstract", **kwargs)
         else:
             sig = Signature(**kwargs)
 
-        sig['name'] = funcobj.__name__
+        sig["name"] = funcobj.__name__
 
         annotations = funcobj.__annotations__
-        if 'return' in annotations:
-            sig['rtype'] = annotations['return']
+        if "return" in annotations:
+            sig["rtype"] = annotations["return"]
         else:
-            sig['rtype'] = Any
+            sig["rtype"] = Any
 
         return sig
 
-    def compatible_function(self, other: 'Signature') -> bool:
+    def compatible_function(self, other: "Signature") -> bool:
         """
         Returns True if two instances are compatible in terms of
         domain type and result type.
@@ -89,12 +86,12 @@ class Signature(dict):
             return False
 
         # check domain types
-        for type1, type2 in zip(self['dtype'], other['dtype']):
+        for type1, type2 in zip(self["dtype"], other["dtype"]):
             if type1 == Any:
                 continue
             elif isinstance(type1, _GenericAlias):
                 if not isinstance(type2, _GenericAlias):
-                    typeargs = type1.__dict__['__args__']
+                    typeargs = type1.__dict__["__args__"]
                     if type2 not in typeargs:
                         return False
                 else:
@@ -105,21 +102,21 @@ class Signature(dict):
                     return False
 
         # check result type
-        if isinstance(self['rtype'], _GenericAlias):
-            if not isinstance(other['rtype'], _GenericAlias):
-                typeargs = self['rtype'].__dict__['__args__']
-                if not other['rtype'] in typeargs:
+        if isinstance(self["rtype"], _GenericAlias):
+            if not isinstance(other["rtype"], _GenericAlias):
+                typeargs = self["rtype"].__dict__["__args__"]
+                if not other["rtype"] in typeargs:
                     return False
             else:
-                if self['rtype'] != other['rtype']:
+                if self["rtype"] != other["rtype"]:
                     return False
-        elif self['rtype'] != Any:
-            if self['rtype'] != other['rtype']:
+        elif self["rtype"] != Any:
+            if self["rtype"] != other["rtype"]:
                 return False
 
         return True
 
-    def accepts_property(self, other: 'Signature') -> bool:
+    def accepts_property(self, other: "Signature") -> bool:
         """
         Returns True if other (implemented operation's signature) is
         compatible to self (abstract operation's signature).
@@ -131,14 +128,15 @@ class Signature(dict):
             return False
         if not self.compatible_op(other):
             return False
-        if not self['name'] == other['name']:
+        if not self["name"] == other["name"]:
             return False
 
         for key, value in self.items():
-            if key not in ['rtype', 'dtype']:
+            if key not in ["rtype", "dtype"]:
                 if key in other:
-                    if isinstance(value, frozenset) and \
-                            isinstance(other[key], frozenset):
+                    if isinstance(value, frozenset) and isinstance(
+                        other[key], frozenset
+                    ):
                         if not value.issubset(other[key]):
                             return False
                     else:
@@ -148,7 +146,7 @@ class Signature(dict):
                     return False
         return True
 
-    def update_function(self, other: 'Signature'):
+    def update_function(self, other: "Signature"):
         """
         Updates self with the content of other. Both must be abstracts.
         """
@@ -156,7 +154,7 @@ class Signature(dict):
         assert self.isabstract and other.isabstract
         assert self.compatible_op(other)
         for key, value in other.items():
-            if key not in ['rtype', 'dtype']:
+            if key not in ["rtype", "dtype"]:
                 if isinstance(value, frozenset):
                     if key in self and isinstance(self[key], frozenset):
                         s = set(self[key])
@@ -180,16 +178,16 @@ class Signature(dict):
             return False
 
         # check result type
-        if isinstance(self['rtype'], _GenericAlias):
+        if isinstance(self["rtype"], _GenericAlias):
             if not isinstance(type(value), _GenericAlias):
-                typeargs = self['rtype'].__dict__['__args__']
+                typeargs = self["rtype"].__dict__["__args__"]
                 if not type(value) in typeargs:
                     return False
             else:
-                if self['rtype'] != type(value):
+                if self["rtype"] != type(value):
                     return False
-        elif self['rtype'] != Any:
-            if self['rtype'] != type(value):
+        elif self["rtype"] != Any:
+            if self["rtype"] != type(value):
                 return False
         return True
 

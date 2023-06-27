@@ -3,8 +3,7 @@ from typing import Callable
 
 
 class TestCase(unittest.TestCase):
-
-    def assertFailsProperly(self, exc:Exception, fnc:Callable, *args, **kwargs):
+    def assertFailsProperly(self, exc: Exception, fnc: Callable, *args, **kwargs):
         failed_properly = False
         try:
             fnc(*args, **kwargs)

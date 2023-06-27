@@ -4,11 +4,17 @@ Multiple solutions on how to enforce an abstract class property
 on an object. Generic types like 'List[int]' are not allowed, 
 because the don't work well with the isinstance()-like methods.
 """
+from typing import Callable, Any
 
-__all__ = ['abstract_class_property', 'setproperty']
+
+__all__ = ["abstract_class_property", "setproperty"]
 
 
-def abstract_class_property(**kwargs):
+def abstract_class_property(**kwargs) -> Callable:
+    """
+    Decorator function to enforce abstract property constraints on
+    classes.
+    """
     return abstract_class_property_B(**kwargs)
 
 
@@ -17,62 +23,66 @@ def setproperty(**kwargs):
         for key, value in kwargs.items():
             setattr(cls, key, value)
         return cls
+
     return decorator
 
 
 """
-Implementation A : class annotations solution using an object descriptor 
+Implementation A: class annotations solution using an object descriptor 
 and a wrapper class with classic pythonic manipulations.
 """
 
 
-def abstract_class_property_A(**kwargs):
+def abstract_class_property_A(**kwargs) -> Callable:
     """
     Decorator function to decorate objects with abstract
-    class properties. Leaves behind another decorator 
+    class properties. Leaves behind another decorator
     that takes a class as its input.
     """
 
-    def abstractor(WrappedClass):
-
+    def abstractor(WrappedClass: Any) -> None:
         class PropertyWrapper(WrappedClass):
             """
             A Wrapper class to decorate objects with abstract class properties.
-            The class has a default dummy annotation, just so that we can append 
+            The class has a default dummy annotation, just so that we can append
             the items of the input dictionary d to the class definition.
             The dummy property is deleted at the end.
             """
+
             _dummy_: None
 
             def __init__(self, *args, **kwargs):
                 WrappedClass.__init__(self)
                 d_ = dict()
-                d_props = PropertyWrapper.__dict__.get('__annotations__', {})
+                d_props = PropertyWrapper.__dict__.get("__annotations__", {})
                 for key, value in d_props.items():
                     d_[key] = value
-                d_self = self.__class__.__dict__.get('__annotations__', {})
+                d_self = self.__class__.__dict__.get("__annotations__", {})
                 for key, value in d_self.items():
                     d_[key] = value
                 for key in d_.keys():
                     if not hasattr(self, key):
-                        raise AttributeError(f'required attribute {key} not present '
-                                             f'in {self.__class__}')
+                        err_str = (
+                            f"required attribute {key} not present "
+                            f"in {self.__class__}"
+                        )
+                    raise AttributeError(err_str)
                 return
 
         res = PropertyWrapper
-        d_ = res.__dict__['__annotations__']
+        d_ = res.__dict__["__annotations__"]
         for key, value in kwargs.items():
             d_[key] = value
-        for key, value in WrappedClass.__dict__.get('__annotations__', {}).items():
+        for key, value in WrappedClass.__dict__.get("__annotations__", {}).items():
             d_[key] = value
-        del d_['_dummy_']
+        del d_["_dummy_"]
         return res
 
     return abstractor
 
 
 """
-Implementation B : class annotations solution using an object descriptor and a 
+Implementation B: class annotations solution using an object descriptor and a 
 wrapper class using the __mro__ property of the class.
 This implementation also checks the validity of the declaration.
 """
@@ -86,14 +96,14 @@ def abstract_class_property_B(**kwargs):
     """
 
     def abstractor(WrappedClass):
-
         class PropertyWrapper(WrappedClass):
             """
             A Wrapper class to decorate objects with abstract class properties.
-            The class has a default dummy annotation, just so that we can append 
+            The class has a default dummy annotation, just so that we can append
             the items of the input dictionary d to the class definition.
             The dummy property is deleted at the end.
             """
+
             _dummy_: None
 
             def __init__(self, *args, **kwargs):
@@ -108,7 +118,7 @@ def abstract_class_property_B(**kwargs):
                 expected types based on the MRO of the class.
                 """
                 t = cls.__mro__
-                l = [ti.__dict__.get('__annotations__', {}) for ti in t]
+                l = [ti.__dict__.get("__annotations__", {}) for ti in t]
                 res = dict()
                 for d in l:
                     for key, value in d.items():
@@ -124,19 +134,24 @@ def abstract_class_property_B(**kwargs):
                 props = self.__class__.__absclsprops__()
                 for key, value in props.items():
                     if not hasattr(self, key):
-                        raise AttributeError(f'required attribute {key} not present '
-                                             f'in {self.__class__}')
+                        if not hasattr(self, key):
+                            err_str = (
+                                f"required attribute {key} not present "
+                                f"in {self.__class__}"
+                            )
+                        raise AttributeError(err_str)
                     else:
                         if not isinstance(getattr(self, key), value):
                             raise TypeError(
-                                'TypeError. key : {}, value = {}'.format(key, value))
+                                "TypeError. key : {}, value = {}".format(key, value)
+                            )
                 return True
 
         res = PropertyWrapper
-        d_ = res.__dict__['__annotations__']
+        d_ = res.__dict__["__annotations__"]
         for key, value in kwargs.items():
             d_[key] = value
-        del d_['_dummy_']
+        del d_["_dummy_"]
         return res
 
     return abstractor

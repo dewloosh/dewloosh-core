@@ -4,17 +4,17 @@ from typing import Callable
 
 class Infix:
     """
-    Implements a custom Infix operator using  the 
+    Implements a custom Infix operator using  the
     operators '<<', '>>' and '|'.
 
     Examples
     --------
-    >>> x = Infix(lambda x, y: x * y)
-    >>> print(2 | x | 4)
+    >>> mul = Infix(lambda x, y: x * y)
+    >>> print(2 | mul | 4)
     8
 
-    >>> x = Infix(lambda x, y: x + y)
-    >>> print(2 << x >> 4)
+    >>> add = Infix(lambda x, y: x + y)
+    >>> print(2 << add >> 4)
     6
     """
 

@@ -5,11 +5,8 @@ from dewloosh.core.cp import classproperty
 
 
 class TestProperty(unittest.TestCase):
-
     def test_class_property(self):
-
         class TestClasss:
-
             @classproperty
             def prop(cls):
                 return 1

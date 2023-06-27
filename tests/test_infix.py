@@ -5,7 +5,6 @@ from dewloosh.core import Infix
 
 
 class TestInfix(unittest.TestCase):
-
     def test_infix(self):
         x = Infix(lambda x, y: x * y)
         self.assertEqual(2 | x | 4, 8)
@@ -14,5 +13,4 @@ class TestInfix(unittest.TestCase):
 
 
 if __name__ == "__main__":
-    
     unittest.main()
