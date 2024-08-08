@@ -1,4 +1,4 @@
-setuptools>=65.5.1 # pinned by Snyk to avoid a vulnerability
+setuptools>=70.0.0 # pinned by Snyk to avoid a vulnerability
 wheel>=0.38.0 # pinned by Snyk to avoid a vulnerability
 appdirs
 matplotlib
